@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import SearchBar from "./SearchBar";
 import { Bell, Home } from "lucide-react";
-import ShoppingCartIcon from "./ShoppingCartIcon";
+import SearchBar from "@/components/SearchBar";
+import ShoppingCartIcon from "@/components/ShoppingCartIcon";
 
 const Navbar = () => {
   return (
