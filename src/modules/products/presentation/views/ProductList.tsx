@@ -1,8 +1,8 @@
 import { ProductsType } from "@/types";
-import Categories from "./Categories";
-import ProductCard from "./ProductCard";
+import Categories from "@/components/Categories";
 import Link from "next/link";
-import Filter from "./Filter";
+import Filter from "@/components/Filter";
+import ProductCard from "@/modules/products/presentation/components/ProductCard";
 
 // TEMPORARY
 const products: ProductsType = [
@@ -116,11 +116,17 @@ const products: ProductsType = [
   },
 ];
 
-const ProductList = ({ category,params }: { category: string, params:"homepage" | "products" }) => {
+const ProductList = ({
+  category,
+  params,
+}: {
+  category: string;
+  params: "homepage" | "products";
+}) => {
   return (
     <div className="w-full">
       <Categories />
-      {params === "products" && <Filter/>}
+      {params === "products" && <Filter />}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-12">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
