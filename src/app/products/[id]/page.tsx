@@ -1,4 +1,4 @@
-import ProductInteraction from "@/components/ProductInteraction";
+import ProductInteraction from "@/modules/products/presentation/components/ProductInteraction";
 import { ProductType } from "@/types";
 import Image from "next/image";
 
