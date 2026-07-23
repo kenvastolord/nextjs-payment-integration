@@ -2,7 +2,7 @@
 
 import PaymentForm from "@/components/PaymentForm";
 import ShippingForm from "@/components/ShippingForm";
-import useCartStore from "@/stores/cartStore";
+import useCartStore from "@/modules/cart/store/cartStore";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CartItemsType, ShippingFormInputs } from "@/types";
 import { ArrowRight, Trash2 } from "lucide-react";
