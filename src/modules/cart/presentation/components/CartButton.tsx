@@ -4,7 +4,7 @@ import useCartStore from "@/modules/cart/store/cartStore";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
-const ShoppingCartIcon = () => {
+const CartButton = () => {
   const { cart, hasHydrated } = useCartStore();
 
   if (!hasHydrated) return null;
@@ -18,4 +18,4 @@ const ShoppingCartIcon = () => {
   );
 };
 
-export default ShoppingCartIcon;
+export default CartButton;
