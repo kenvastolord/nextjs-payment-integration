@@ -1,7 +1,7 @@
 "use client";
 
 import PaymentForm from "@/components/PaymentForm";
-import ShippingForm from "@/components/ShippingForm";
+import ShippingForm from "@/modules/checkout/presentation/components/ShippingForm";
 import useCartStore from "@/modules/cart/store/cartStore";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
