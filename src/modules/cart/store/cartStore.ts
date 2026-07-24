@@ -1,4 +1,8 @@
-import { CartStoreActionsType, CartStoreStateType } from "@/types";
+import {
+  CartStoreActionsType,
+  CartStoreStateType,
+} from "@/modules/cart/types/cart.types";
+
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 

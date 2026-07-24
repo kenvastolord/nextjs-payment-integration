@@ -1,4 +1,4 @@
-import { ProductsType } from "@/types";
+import { ProductsType } from "@/modules/products/types/product.types";
 import Categories from "@/components/Categories";
 import Link from "next/link";
 import Filter from "@/components/Filter";

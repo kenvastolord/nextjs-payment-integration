@@ -1,4 +1,7 @@
-import { PaymentFormInputs, paymentFormSchema } from "@/types";
+import {
+  PaymentFormInputs,
+  paymentFormSchema,
+} from "@/modules/payments/schemas/payment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";

@@ -1,5 +1,5 @@
 import ProductInteraction from "@/modules/products/presentation/components/ProductInteraction";
-import { ProductType } from "@/types";
+import { ProductType } from "@/modules/products/types/product.types";
 import Image from "next/image";
 
 // TEMPORARY
