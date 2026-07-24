@@ -40,9 +40,11 @@ _No tasks yet._
 
 ## Cart
 
-_No tasks yet._
+### Domain Model
 
----
+- [ ] Decouple CartItem from ProductType.
+- [ ] Introduce a dedicated CartItem domain model.
+- [ ] Store only the selected product snapshot required for checkout.
 
 ## Checkout
 

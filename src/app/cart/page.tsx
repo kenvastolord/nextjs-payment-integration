@@ -4,12 +4,11 @@ import PaymentForm from "@/modules/payments/presentation/components/PaymentForm"
 import ShippingForm from "@/modules/checkout/presentation/components/ShippingForm";
 import useCartStore from "@/modules/cart/store/cartStore";
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
-import { ArrowRight, Trash2 } from "lucide-react";
-import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import CheckoutSteps from "@/modules/checkout/presentation/components/CheckoutSteps";
-import CartItem from "@/modules/cart/presentation/components/CartItem";
+import CartItemsList from "@/modules/cart/presentation/components/CartItemList";
 
 // TEMPORARY
 // const cartItems: CartItemsType = [
@@ -90,14 +89,7 @@ function CartContent() {
         {/* STEPS */}
         <div className="w-full lg:w-7/12 shadow-lg border-1 border-gray-100 p-8 rounded-lg flex flex-col gap-8">
           {activeStep === 1 ? (
-            cart.map((item) => (
-              // SINGLE CART ITEM
-              <CartItem
-                key={`${item.id}-${item.selectedSize}-${item.selectedColor}`}
-                item={item}
-                onRemove={removeFromCart}
-              />
-            ))
+            <CartItemsList items={cart} onRemove={removeFromCart} />
           ) : activeStep === 2 ? (
             <ShippingForm
               shippingForm={shippingForm}
