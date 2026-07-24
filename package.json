@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -16,6 +17,7 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.61.1",
     "react-toastify": "^11.0.5",
+    "typecheck": "^0.1.2",
     "zod": "^4.0.14",
     "zustand": "^5.0.7"
   },

@@ -46,15 +46,50 @@ _No tasks yet._
 
 ## Checkout
 
-_No tasks yet._
+### Forms
 
----
+- [ ] Create reusable form field components.
+- [ ] Create reusable text input components.
+- [ ] Standardize form validation patterns.
+- [ ] Standardize error message rendering.
+
+### Domain
+
+- [ ] Move checkout business rules into the application layer.
+- [ ] Remove navigation logic from presentation components.
+- [ ] Introduce use cases for shipping and payment.
+- [ ] Design the checkout workflow.
+- [ ] Validate checkout step transitions.
+
+### Persistence
+
+- [ ] Persist shipping information.
+- [ ] Associate shipping data with carts and orders.
+- [ ] Support guest and authenticated checkout.
 
 ## Payments
 
-_No tasks yet._
+### Architecture
 
----
+- [ ] Design the PaymentService abstraction.
+- [ ] Isolate payment providers behind the infrastructure layer.
+- [ ] Prevent presentation components from depending on payment providers.
+- [ ] Define the PaymentService interface.
+- [ ] Implement the Stripe provider behind the PaymentService abstraction.
+- [ ] Ensure the application layer is provider-agnostic.
+- [ ] Prevent business logic from depending on payment SDKs.
+
+### Integration
+
+- [ ] Integrate Stripe provider.
+- [ ] Create payment intents.
+- [ ] Handle payment confirmation and failures.
+- [ ] Persist payment transactions.
+
+### Domain
+
+- [ ] Introduce payment use cases.
+- [ ] Model the payment lifecycle.
 
 ## Shared
 
