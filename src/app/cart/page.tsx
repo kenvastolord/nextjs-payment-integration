@@ -1,9 +1,8 @@
 "use client";
 
-import PaymentForm from "@/components/PaymentForm";
+import PaymentForm from "@/modules/payments/presentation/components/PaymentForm";
 import ShippingForm from "@/modules/checkout/presentation/components/ShippingForm";
 import useCartStore from "@/modules/cart/store/cartStore";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
 import { ArrowRight, Trash2 } from "lucide-react";
 import Image from "next/image";

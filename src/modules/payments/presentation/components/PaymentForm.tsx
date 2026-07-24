@@ -1,3 +1,4 @@
+"use client";
 import {
   PaymentFormInputs,
   paymentFormSchema,
@@ -16,8 +17,9 @@ const PaymentForm = () => {
     resolver: zodResolver(paymentFormSchema),
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePaymentForm: SubmitHandler<PaymentFormInputs> = (data) => { };
+  const handlePaymentForm: SubmitHandler<PaymentFormInputs> = () => {
+    // TODO: Integrate payment application service.
+  };
 
   return (
     <form
