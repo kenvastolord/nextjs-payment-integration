@@ -1,5 +1,6 @@
 "use client";
 
+import { PRODUCT_SORT_OPTIONS } from "@/modules/products/constants/product-sort-options";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Filter = () => {
@@ -22,10 +23,11 @@ const Filter = () => {
         className="ring-1 ring-gray-200 shadow-md p-1 rounded-sm"
         onChange={(e) => handleFilter(e.target.value)}
       >
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-        <option value="asc">Price: Low to High</option>
-        <option value="desc">Price: High to Low</option>
+        {PRODUCT_SORT_OPTIONS.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </select>
     </div>
   );

@@ -1,7 +1,7 @@
 import { ProductsType } from "@/modules/products/types/product.types";
-import Categories from "@/components/Categories";
+import Categories from "../components/Categories";
 import Link from "next/link";
-import Filter from "@/components/Filter";
+import ProductFilter from "../components/ProductFilter";
 import ProductCard from "@/modules/products/presentation/components/ProductCard";
 
 // TEMPORARY
@@ -126,7 +126,7 @@ const ProductList = ({
   return (
     <div className="w-full">
       <Categories />
-      {params === "products" && <Filter />}
+      {params === "products" && <ProductFilter />}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-12">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

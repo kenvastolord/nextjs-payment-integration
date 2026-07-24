@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Bell, Home } from "lucide-react";
-import SearchBar from "@/components/SearchBar";
+import ProductSearch from "@/modules/products/presentation/components/ProductSearch";
 import ShoppingCartIcon from "@/components/ShoppingCartIcon";
 
 const Navbar = () => {
@@ -22,7 +22,7 @@ const Navbar = () => {
       </Link>
       {/* RIGHT */}
       <div className="flex items-center gap-6">
-        <SearchBar />
+        <ProductSearch />
         <Link href="/">
           <Home className="w-4 h-4 text-gray-600" />
         </Link>
