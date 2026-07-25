@@ -1,13 +1,10 @@
 "use client";
 
-import CartItemsList from "@/modules/cart/presentation/components/CartItemList";
 import CartSummary from "@/modules/cart/presentation/components/CartSummary";
 
-import CheckoutSteps from "@/modules/checkout/presentation/components/CheckoutSteps";
-import ShippingForm from "@/modules/checkout/presentation/components/ShippingForm";
-import { useCheckout } from "@/modules/checkout/presentation/hooks/useCheckout";
-
-import PaymentForm from "@/modules/payments/presentation/components/PaymentForm";
+import CheckoutContent from "../components/CheckoutContent";
+import CheckoutSteps from "../components/CheckoutSteps";
+import { useCheckout } from "../hooks/useCheckout";
 
 function CheckoutView() {
   const {
@@ -27,20 +24,13 @@ function CheckoutView() {
 
       <div className="w-full flex flex-col lg:flex-row gap-16">
         <div className="w-full lg:w-7/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8">
-          {activeStep === 1 ? (
-            <CartItemsList items={cart} onRemove={removeFromCart} />
-          ) : activeStep === 2 ? (
-            <ShippingForm
-              shippingForm={shippingForm}
-              setShippingForm={setShippingForm}
-            />
-          ) : activeStep === 3 && shippingForm ? (
-            <PaymentForm />
-          ) : (
-            <p className="text-sm text-gray-500">
-              Please fill in the shipping form to continue.
-            </p>
-          )}
+          <CheckoutContent
+            activeStep={activeStep}
+            cart={cart}
+            shippingForm={shippingForm}
+            setShippingForm={setShippingForm}
+            onRemoveCartItem={removeFromCart}
+          />
         </div>
 
         <CartSummary
