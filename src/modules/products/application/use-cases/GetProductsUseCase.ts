@@ -1,8 +1,9 @@
-import { products } from "../../infrastructure/data/products";
-import { ProductsType } from "../../types/product.types";
+import { InMemoryProductRepository } from "../../infrastructure/repositories/InMemoryProductRepository";
 
 export class GetProductsUseCase {
-  execute(): ProductsType {
-    return products;
+  private readonly repository = new InMemoryProductRepository();
+
+  execute() {
+    return this.repository.findAll();
   }
 }
