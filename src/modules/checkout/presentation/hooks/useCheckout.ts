@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import useCartStore from "@/modules/cart/store/cartStore";
 
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
+import { removeFromCartUseCase } from "@/modules/cart/infrastructure/container";
 
 export function useCheckout() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export function useCheckout() {
 
   const activeStep = Number(searchParams.get("step") ?? "1");
 
-  const { cart, removeFromCart } = useCartStore();
+  const { cart } = useCartStore();
 
   const goToStep = (step: number) => {
     router.push(`/cart?step=${step}`, {
@@ -27,7 +28,7 @@ export function useCheckout() {
     activeStep,
 
     cart,
-    removeFromCart,
+    removeFromCartUseCase,
 
     shippingForm,
     setShippingForm,
