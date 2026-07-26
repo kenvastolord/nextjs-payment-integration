@@ -2,7 +2,7 @@ import Categories from "../components/Categories";
 import Link from "next/link";
 import ProductFilter from "../components/ProductFilter";
 import ProductCard from "@/modules/products/presentation/components/ProductCard";
-import { GetProductsUseCase } from "../../application/use-cases/GetProductsUseCase";
+import { getProductsUseCase } from "../../infrastructure/container";
 
 const ProductList = ({
   category,
@@ -11,7 +11,6 @@ const ProductList = ({
   category: string;
   params: "homepage" | "products";
 }) => {
-  const getProductsUseCase = new GetProductsUseCase();
   const products = getProductsUseCase.execute();
   return (
     <div className="w-full">

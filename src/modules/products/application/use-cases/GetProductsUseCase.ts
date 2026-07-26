@@ -1,7 +1,7 @@
-import { InMemoryProductRepository } from "../../infrastructure/repositories/InMemoryProductRepository";
+import { ProductRepository } from "../../domain/repositories/ProductRepository";
 
 export class GetProductsUseCase {
-  private readonly repository = new InMemoryProductRepository();
+  constructor(private readonly repository: ProductRepository) { }
 
   execute() {
     return this.repository.findAll();

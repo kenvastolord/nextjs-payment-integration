@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-import { GetProductByIdUseCase } from "@/modules/products/application/use-cases/GetProductByIdUseCase";
 import ProductInteraction from "@/modules/products/presentation/components/ProductInteraction";
+import { getProductByIdUseCase } from "@/modules/products/infrastructure/container";
 
 export const generateMetadata = async ({
   params,
@@ -11,7 +11,6 @@ export const generateMetadata = async ({
 }) => {
   const { id } = await params;
 
-  const getProductByIdUseCase = new GetProductByIdUseCase();
   const product = getProductByIdUseCase.execute(Number(id));
 
   if (!product) {
@@ -33,7 +32,6 @@ const ProductPage = async ({
 }) => {
   const { id } = await params;
 
-  const getProductByIdUseCase = new GetProductByIdUseCase();
   const product = getProductByIdUseCase.execute(Number(id));
 
   if (!product) {
