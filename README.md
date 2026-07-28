@@ -2,6 +2,12 @@
 
 A modern e-commerce application built with Next.js, evolving from an existing frontend into a modular and scalable application architecture.
 
+## Live Demo
+
+Explore the latest deployed version of the application:
+
+**Live Demo:** https://nextjs-payment-integration-7ztn.vercel.app/
+
 ## About
 
 **Next.js Payment Integration** is an e-commerce application built with Next.js, React, and TypeScript.
