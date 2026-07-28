@@ -1,14 +1,79 @@
 # Next.js Payment Integration
 
-A modern e-commerce application built with Next.js, focused on providing a scalable foundation for backend services and online payment integrations.
+A modern e-commerce application built with Next.js, evolving from an existing frontend into a modular and scalable application architecture.
 
 ## About
 
-**Next.js Payment Integration** is an e-commerce application that demonstrates a modern frontend architecture using Next.js, React, and TypeScript.
+**Next.js Payment Integration** is an e-commerce application built with Next.js, React, and TypeScript.
 
-The project currently provides the client-side experience of an online store, including product browsing, search, filtering, shopping cart management, and checkout-related user interfaces.
+The project provides the client-side experience of an online store, including product browsing, product details, search, filtering, shopping cart management, and checkout-related user interfaces.
 
-As the project evolves, new backend capabilities and payment integrations will be incorporated while maintaining a clean, scalable, and maintainable architecture.
+The repository started from an existing e-commerce frontend and is being progressively evolved through modularization, separation of responsibilities, application use cases, repository abstractions, and infrastructure implementations.
+
+## From UI Prototype to Modular Architecture
+
+### Initial Project
+
+The repository started from the **e-commerce-ui** project created by **Safak**. The initial codebase provided the core e-commerce UI and client-side functionality, with shared components, a centralized cart store, and shared types.
+
+The initial structure was centered around shared UI components and client-side state:
+
+```text
+  src/
+  ├── app/
+  │   ├── cart/
+  │   └── products/
+  ├── components/
+  │   ├── Categories.tsx
+  │   ├── Filter.tsx
+  │   ├── Footer.tsx
+  │   ├── Navbar.tsx
+  │   ├── PaymentForm.tsx
+  │   ├── ProductCard.tsx
+  │   ├── ProductInteraction.tsx
+  │   ├── ProductList.tsx
+  │   ├── SearchBar.tsx
+  │   ├── ShippingForm.tsx
+  │   └── ShoppingCartIcon.tsx
+  ├── stores/
+  │   └── cartStore.ts
+  └── types.ts
+```
+
+### Current Project Infrastructure
+
+The project has since been progressively reorganized into feature-oriented modules with separated architectural responsibilities.
+
+```text
+  src/
+  ├── app/
+  │   ├── cart/
+  │   └── products/
+  └── modules/
+      ├── cart/
+      │   ├── application/
+      │   ├── domain/
+      │   ├── infrastructure/
+      │   ├── presentation/
+      │   ├── store/
+      │   └── types/
+      ├── checkout/
+      │   ├── presentation/
+      │   ├── schemas/
+      │   └── types/
+      ├── payments/
+      │   ├── presentation/
+      │   ├── schemas/
+      │   └── types/
+      └── products/
+          ├── application/
+          ├── domain/
+          ├── infrastructure/
+          ├── presentation/
+          └── types/
+```
+
+The current architecture introduces separation between Presentation, Application, Domain, and Infrastructure, with repository abstractions and infrastructure implementations being introduced progressively within the implemented modules.
 
 ## Features
 
@@ -21,6 +86,27 @@ As the project evolves, new backend capabilities and payment integrations will b
 - Shipping information form
 - Payment information form (UI)
 - Client-side state management with Zustand
+
+## Architecture
+
+```text
+  Presentation
+        ↓
+  Application
+        ↓
+  Domain
+        ↑
+  Infrastructure
+```
+
+Current implemented modules include:
+
+- Products — product retrieval through application use cases and a repository abstraction with an in-memory implementation.
+- Cart — cart operations through application use cases and a repository abstraction backed by Zustand.
+- Checkout — checkout presentation flow and shipping information form.
+- Payments — payment information UI and validation schema.
+
+The architecture is still evolving as new application and infrastructure capabilities are introduced.
 
 ## Tech Stack
 
