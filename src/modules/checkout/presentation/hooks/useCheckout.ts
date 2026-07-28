@@ -7,6 +7,7 @@ import useCartStore from "@/modules/cart/store/cartStore";
 
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
 import { removeFromCartUseCase } from "@/modules/cart/infrastructure/container";
+import { CartItemType } from "@/modules/cart/types/cart.types";
 
 export function useCheckout() {
   const router = useRouter();
@@ -18,6 +19,10 @@ export function useCheckout() {
 
   const { cart } = useCartStore();
 
+  const removeFromCart = (item: CartItemType) => {
+    removeFromCartUseCase.execute(item);
+  };
+
   const goToStep = (step: number) => {
     router.push(`/cart?step=${step}`, {
       scroll: false,
@@ -28,7 +33,7 @@ export function useCheckout() {
     activeStep,
 
     cart,
-    removeFromCartUseCase,
+    removeFromCart,
 
     shippingForm,
     setShippingForm,
