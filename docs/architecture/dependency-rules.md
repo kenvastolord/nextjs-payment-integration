@@ -217,9 +217,49 @@ Examples:
 ## Rules
 
 - A module must not access another module's infrastructure directly.
-- Communication between modules should occur through the Application or Domain layers.
+- Communication between modules should occur through the Application layer.
+- Business modules should never access another module's Domain directly.
 - Modules should remain as independent as possible.
 - Modules should expose behavior, not implementation details.
+
+---
+
+# Module Dependencies
+
+Business modules collaborate through business concepts rather than implementation details.
+
+The primary business workflow is:
+
+```text
+Products
+      │
+      ▼
+Cart
+      │
+      ▼
+Checkout
+      │
+      ▼
+Orders
+      │
+      ▼
+Payments
+```
+
+This workflow represents business collaboration.
+
+It does not imply direct implementation dependencies.
+
+## Rules
+
+- Products must remain independent from all other business modules.
+- Cart may collaborate with Products.
+- Checkout may coordinate Cart and Orders.
+- Orders may collaborate with Payments through business abstractions.
+- Payments always operate on an existing Order.
+- Payments must never communicate directly with Cart.
+- Business modules must never access another module's Infrastructure layer.
+- Modules expose behavior, never implementation details.
 
 ---
 
@@ -293,6 +333,51 @@ Examples include:
 - Cloud storage providers
 - Messaging providers
 - Notification providers
+
+---
+
+# Payment Gateway
+
+The application communicates with payment providers through the `PaymentGateway` abstraction.
+
+The PaymentGateway represents a business capability rather than a provider-specific API.
+
+Business modules never communicate directly with external payment providers.
+
+```text
+Payments
+        │
+        ▼
+PaymentGateway
+        ▲
+        │
+StripeGateway
+
+PayPalGateway
+
+MercadoPagoGateway
+```
+
+Replacing one provider with another should require changes only within the Infrastructure layer and dependency registration.
+
+---
+
+# Provider Model Isolation
+
+Provider-specific models must never leave the Infrastructure layer.
+
+Examples include:
+
+- Checkout Session
+- Payment Intent
+- Client Secret
+- Preference
+- Provider Events
+- Webhook Payload
+
+These models must be translated into business models before crossing architectural boundaries.
+
+Neither the Domain nor the Application layer should depend on provider-specific terminology.
 
 ---
 
@@ -385,6 +470,29 @@ Domain → Infrastructure
 
 Domain → External Services
 ```
+
+---
+
+# Business Capability Over Provider Capability
+
+The application models business capabilities instead of provider APIs.
+
+Examples of business capabilities include:
+
+- StartPayment
+- CancelPayment
+- RefundPayment
+- GetPaymentStatus
+
+Examples of provider-specific operations include:
+
+- CreateCheckoutSession
+- CreatePaymentIntent
+- CreatePreference
+
+Business terminology belongs to the Domain.
+
+Provider terminology belongs to Infrastructure.
 
 ---
 
