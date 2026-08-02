@@ -49,6 +49,7 @@ const ProductPage = async ({
         <Image
           src={product.images[selectedColor]}
           alt={product.name}
+          sizes="(max-width: 1023px) 100vw, 42vw"
           fill
           className="object-contain rounded-md"
         />
@@ -73,6 +74,7 @@ const ProductPage = async ({
             alt="klarna"
             width={50}
             height={25}
+            sizes="(max-width: 1023px) 100vw, 42vw"
             className="rounded-md"
           />
 
@@ -81,6 +83,7 @@ const ProductPage = async ({
             alt="cards"
             width={50}
             height={25}
+            sizes="(max-width: 1023px) 100vw, 42vw"
             className="rounded-md"
           />
 
@@ -89,6 +92,7 @@ const ProductPage = async ({
             alt="stripe"
             width={50}
             height={25}
+            sizes="(max-width: 1023px) 100vw, 42vw"
             className="rounded-md"
           />
         </div>

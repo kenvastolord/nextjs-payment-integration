@@ -8,7 +8,21 @@ import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-const PaymentForm = () => {
+import { createOrderAction } from "@/modules/orders/actions/orderActions";
+import { clearCartUseCase } from "@/modules/cart/infrastructure/container";
+import { CartItemType } from "@/modules/cart/types/cart.types";
+import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
+import { useRouter } from "next/navigation";
+
+const PaymentForm = ({
+  shippingForm,
+  cart,
+}: {
+  shippingForm: ShippingFormInputs;
+  cart: CartItemType[];
+}) => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -17,8 +31,37 @@ const PaymentForm = () => {
     resolver: zodResolver(paymentFormSchema),
   });
 
-  const handlePaymentForm: SubmitHandler<PaymentFormInputs> = () => {
-    // TODO: Integrate payment application service.
+  const handlePaymentForm: SubmitHandler<PaymentFormInputs> = async (data) => {
+    try {
+      if (!cart || cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      // Create the order using Server Action
+      const order = await createOrderAction({
+        shippingForm,
+        cart: cart.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          selectedColor: item.selectedColor,
+          selectedSize: item.selectedSize,
+        })),
+      });
+
+      console.log("Order created successfully:", order);
+
+      // Clear the cart
+      clearCartUseCase.execute();
+
+      // Redirect to confirmation page
+      router.push(`/orders/confirmation/${order.id}`);
+    } catch (err: any) {
+      console.error("Order creation failed:", err);
+      alert(`Failed to place order: ${err.message || err}`);
+    }
   };
 
   return (

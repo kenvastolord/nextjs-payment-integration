@@ -98,17 +98,110 @@ The Aggregate Root is responsible for protecting the consistency of the Order an
 
 - Order
 
+### Order
+
+```text
+Order
+├── id
+├── customerId
+├── customerSnapshot
+├── shippingAddress
+├── items
+├── totals
+├── status
+├── paymentStatus
+├── createdAt
+└── updatedAt
+```
+
+| Property | Description |
+|----------|-------------|
+| id | Unique identifier of the Order. |
+| customerId | Identifier of the customer who owns the Order. |
+| customerSnapshot | Snapshot of the customer information at the time of purchase. |
+| shippingAddress | Shipping address used during checkout. |
+| items | Collection of purchased items. |
+| totals | Financial summary of the Order. |
+| status | Current business state of the Order. |
+| paymentStatus | Current payment state associated with the Order. |
+| createdAt | Order creation timestamp. |
+| updatedAt | Last modification timestamp. |
+
+---
+
 ## Entities
 
-- Order
-- OrderItem
+### OrderItem
+
+The Order Aggregate owns every OrderItem.
+
+Each OrderItem represents a snapshot of the purchased product at the time the Order was created.
+
+Future modifications to the Product catalog must never affect existing Orders.
+
+```text
+OrderItem
+├── productId
+├── sku
+├── name
+├── originalUnitPrice
+├── finalUnitPrice
+├── quantity
+└── lineTotal
+```
+
+| Property | Description |
+|----------|-------------|
+| productId | Identifier of the purchased Product. |
+| sku | Purchased product variant. |
+| name | Product name at the time of purchase. |
+| originalUnitPrice | Original product price before discounts. |
+| finalUnitPrice | Final unit price paid by the customer. |
+| quantity | Purchased quantity. |
+| lineTotal | Final amount charged for the Order line. |
+
+The OrderItem stores historical purchase information.
+
+It is intentionally independent from future Product updates.
+
+---
 
 ## Value Objects
 
-- CustomerSnapshot
-- ShippingAddress
-- Money
-- OrderTotals
+### CustomerSnapshot
+
+Represents customer information captured during checkout.
+
+### ShippingAddress
+
+Represents the shipping address used for the Order.
+
+### Money
+
+Represents monetary values used throughout the Order Aggregate.
+
+### OrderTotals
+
+Represents the financial summary of the Order.
+
+```text
+OrderTotals
+├── subtotal
+├── shipping
+├── taxes
+├── discount
+└── total
+```
+
+| Property | Description |
+|----------|-------------|
+| subtotal | Sum of every OrderItem lineTotal. |
+| shipping | Shipping cost. |
+| taxes | Applied taxes. |
+| discount | Total discount applied to the Order. |
+| total | Final amount to be charged. |
+
+OrderTotals is responsible for guaranteeing internal financial consistency.
 
 The Aggregate Root owns the lifecycle of all child entities.
 
@@ -122,11 +215,15 @@ The Order Aggregate is responsible for enforcing its own consistency.
 
 Business invariants include:
 
-- An Order cannot exist without Order Items.
-- Order totals must always remain consistent.
+- An Order must contain at least one OrderItem.
+- Product quantities must be greater than zero.
+- Monetary values cannot be negative.
+- OrderTotals must always remain internally consistent.
+- The subtotal must equal the sum of every OrderItem lineTotal.
+- The total must equal subtotal + shipping + taxes − discount.
 - Invalid state transitions must be rejected.
-- Product quantities cannot be negative.
-- The Aggregate is the only component allowed to modify its internal state.
+- The Aggregate Root is the only component allowed to modify its child entities.
+- Customer and Product information stored inside the Order represent immutable snapshots of the purchase.
 
 Business invariants belong to the Domain and must never depend on Presentation, Application, Infrastructure, or external providers.
 
@@ -142,9 +239,72 @@ Subsequent state changes are managed by the Orders module in response to valid b
 
 Payment confirmation may trigger Order state transitions, but Orders remain responsible for validating and applying those transitions.
 
-The exact state model is defined by the Order Aggregate.
+## Order Status
+
+```text
+CREATED
+CONFIRMED
+PROCESSING
+SHIPPED
+DELIVERED
+CANCELLED
+```
+
+Allowed transitions:
+
+```text
+CREATED
+    │
+    ▼
+CONFIRMED
+    │
+    ▼
+PROCESSING
+    │
+    ▼
+SHIPPED
+    │
+    ▼
+DELIVERED
+```
+
+Cancellation:
+
+```text
+CREATED ─────────► CANCELLED
+
+CONFIRMED ───────► CANCELLED
+```
+
+Orders in the SHIPPED or DELIVERED state cannot be cancelled.
 
 ---
+
+## Payment Status
+
+```text
+PENDING
+PAID
+FAILED
+REFUNDED
+```
+
+Allowed transitions:
+
+```text
+PENDING
+   ├────► PAID
+   └────► FAILED
+
+PAID
+   │
+   ▼
+REFUNDED
+```
+
+The payment lifecycle is owned by the Payments module.
+
+The Orders module stores the current payment status to coordinate business workflows while remaining independent from payment providers.
 
 # Application Layer
 
@@ -154,7 +314,7 @@ Typical responsibilities include:
 
 - Creating Orders.
 - Retrieving Orders.
-- Updating Order state through business operations.
+- Coordinating Order state transitions through business operations.
 - Coordinating persistence through repository abstractions.
 
 Business rules remain inside the Domain.
@@ -165,7 +325,25 @@ Typical use cases include:
 
 - CreateOrderUseCase
 - GetOrderByIdUseCase
-- UpdateOrderStatusUseCase
+- ConfirmOrderUseCase
+- PrepareOrderUseCase
+- ShipOrderUseCase
+- DeliverOrderUseCase
+- CancelOrderUseCase
+
+Each business transition is represented by a dedicated use case.
+
+Instead of exposing a generic `UpdateOrderStatusUseCase`, every operation expresses a specific business intent, such as confirming, preparing, shipping, delivering, or cancelling an order.
+
+This approach provides several advantages:
+
+- Preserves the ubiquitous language of the domain.
+- Avoids generic status updates and `switch`-based implementations.
+- Keeps each use case focused on a single responsibility.
+- Allows each workflow to evolve independently with its own dependencies, validations, and integrations.
+- Aligns with Domain-Driven Design (DDD), Clean Architecture, and CQRS principles.
+
+The use cases delegate all business rules and state transition validation to the `Order` Aggregate, which remains the single source of truth for the Order lifecycle.
 
 ---
 

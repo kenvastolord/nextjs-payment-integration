@@ -35,7 +35,7 @@ function CheckoutContent({
 
     case 3:
       return shippingForm ? (
-        <PaymentForm />
+        <PaymentForm shippingForm={shippingForm} cart={cart} />
       ) : (
         <p className="text-sm text-gray-500">
           Please fill in the shipping form to continue.

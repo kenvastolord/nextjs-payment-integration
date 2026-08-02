@@ -21,6 +21,7 @@ const CartItem = ({ item, onRemove }: CartItemProps) => {
             src={item.images[item.selectedColor]}
             alt={item.name}
             fill
+            sizes="128px"
             className="object-contain"
           />
         </div>
