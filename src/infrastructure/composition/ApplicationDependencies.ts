@@ -1,3 +1,2 @@
 
-export interface ApplicationDependencies {
-}
+export interface ApplicationDependencies { }

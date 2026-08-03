@@ -9,7 +9,7 @@ import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { createOrderAction } from "@/modules/orders/actions/orderActions";
-import { clearCartUseCase } from "@/modules/cart/infrastructure/container";
+import { container } from "@/infrastructure/container";
 import { CartItemType } from "@/modules/cart/types/cart.types";
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
 import { useRouter } from "next/navigation";
@@ -54,7 +54,7 @@ const PaymentForm = ({
       console.log("Order created successfully:", order);
 
       // Clear the cart
-      clearCartUseCase.execute();
+      container.cart.clearCartUseCase.execute();
 
       // Redirect to confirmation page
       router.push(`/orders/confirmation/${order.id}`);

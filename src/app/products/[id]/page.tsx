@@ -1,17 +1,21 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 
+import { container } from "@/infrastructure/container";
+
 import ProductInteraction from "@/modules/products/presentation/components/ProductInteraction";
-import { getProductByIdUseCase } from "@/modules/products/infrastructure/container";
 
 export const generateMetadata = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
-}) => {
+}): Promise<Metadata> => {
   const { id } = await params;
 
-  const product = getProductByIdUseCase.execute(Number(id));
+  const product = container.products.getProductByIdUseCase.execute(
+    Number(id),
+  );
 
   if (!product) {
     return {};
@@ -32,7 +36,9 @@ const ProductPage = async ({
 }) => {
   const { id } = await params;
 
-  const product = getProductByIdUseCase.execute(Number(id));
+  const product = container.products.getProductByIdUseCase.execute(
+    Number(id),
+  );
 
   if (!product) {
     notFound();
@@ -100,9 +106,9 @@ const ProductPage = async ({
         <p className="text-gray-500 text-xs">
           By clicking Pay Now, you agree to our{" "}
           <span className="underline hover:text-black">Terms & Conditions</span>{" "}
-          and <span className="underline hover:text-black">Privacy Policy</span>
-          . You authorize us to charge your selected payment method for the
-          total amount shown. All sales are subject to our return and{" "}
+          and <span className="underline hover:text-black">Privacy Policy</span>.
+          You authorize us to charge your selected payment method for the total
+          amount shown. All sales are subject to our return and{" "}
           <span className="underline hover:text-black">Refund Policies</span>.
         </p>
       </div>

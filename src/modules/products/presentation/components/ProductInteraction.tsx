@@ -1,6 +1,5 @@
 "use client";
-
-import { addProductToCartUseCase } from "@/modules/cart/infrastructure/container";
+import { container } from "@/infrastructure/container";
 import { ProductType } from "@/modules/products/types/product.types";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -38,7 +37,7 @@ const ProductInteraction = ({
   };
 
   const handleAddToCart = () => {
-    addProductToCartUseCase.execute({
+    container.cart.addProductToCartUseCase.execute({
       ...product,
       quantity,
       selectedColor,
@@ -62,8 +61,8 @@ const ProductInteraction = ({
             >
               <div
                 className={`w-6 h-6 text-center flex items-center justify-center ${selectedSize === size
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
                   }`}
               >
                 {size.toUpperCase()}
