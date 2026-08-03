@@ -341,3 +341,72 @@ Every module should follow these principles:
 - Remain independently evolvable whenever possible.
 
 The objective is to create independent, maintainable modules that can evolve without introducing unnecessary coupling across the application.
+
+# Business Ports vs Platform Ports
+
+Modules own their business ports.
+
+Cross-cutting technical capabilities belong to Platform Ports.
+
+## Business Ports
+
+A Business Port belongs to exactly one bounded context.
+
+Examples:
+
+- OrderRepository
+- ProductRepository
+- PaymentGateway
+- UserRepository
+
+Business Ports remain inside their owning module.
+
+---
+
+## Platform Ports
+
+Platform Ports represent technical capabilities shared across the application.
+
+Examples:
+
+- IdGenerator
+- Clock
+- PasswordHasher
+- TokenGenerator
+- EmailSender
+- EventBus
+- FileStorage
+
+Platform Ports live under:
+
+```text
+src/
+└── ports/
+```
+
+---
+
+# Decision Guide
+
+When introducing a new interface, use the following decision process.
+
+| Question | Yes | No |
+|----------|-----|----|
+| Does the interface model a business capability owned by a bounded context? | Keep it inside the owning module. | Continue. |
+| Does the interface represent a cross-cutting technical capability? | Place it under `src/ports`. | Revisit the design before introducing the abstraction. |
+
+---
+
+# Examples
+
+| Interface | Category | Location |
+|------------|----------|----------|
+| OrderRepository | Business Port | modules/orders/domain/repositories |
+| ProductRepository | Business Port | modules/products/domain/repositories |
+| PaymentGateway | Business Port | modules/payments/domain/services |
+| IdGenerator | Platform Port | src/ports/identity |
+| Clock | Platform Port | src/ports/time |
+| PasswordHasher | Platform Port | src/ports/security |
+| EventBus | Platform Port | src/ports/messaging |
+| EmailSender | Platform Port | src/ports/communication |
+| FileStorage | Platform Port | src/ports/storage |

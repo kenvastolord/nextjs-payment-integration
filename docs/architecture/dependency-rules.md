@@ -503,3 +503,87 @@ The architecture should remain independent from specific technologies whenever p
 Business rules should outlive frameworks, databases, SDKs, and external providers, allowing implementation details to evolve without affecting the core application.
 
 Each layer should evolve independently while minimizing coupling, maximizing maintainability, scalability, testability, and long-term flexibility.
+
+# Port Ownership
+
+The architecture defines two categories of ports.
+
+## Business Ports
+
+Business Ports belong to a single bounded context and express business capabilities.
+
+Examples:
+
+- OrderRepository
+- ProductRepository
+- UserRepository
+- PaymentGateway
+
+Business Ports must remain inside the owning module.
+
+Example:
+
+```text
+modules/
+└── orders/
+    └── domain/
+        └── repositories/
+```
+
+Business Ports must never be moved to `src/ports`.
+
+---
+
+## Platform Ports
+
+Platform Ports represent cross-cutting technical capabilities required by the application.
+
+Examples:
+
+- IdGenerator
+- Clock
+- PasswordHasher
+- TokenGenerator
+- EmailSender
+- FileStorage
+- EventBus
+
+Platform Ports must live under:
+
+```text
+src/
+└── ports/
+```
+
+Infrastructure provides their implementations.
+
+Application depends only on Platform Ports.
+
+---
+
+## Infrastructure Implementations
+
+Every Platform Port must have its implementation inside `src/infrastructure`.
+
+Example:
+
+```text
+src/
+├── ports/
+│   └── identity/
+│       └── IdGenerator.ts
+│
+└── infrastructure/
+    └── identity/
+        └── UuidV7Generator.ts
+```
+
+Application and Domain must never depend directly on Infrastructure implementations.
+
+---
+
+## Composition Root
+
+The Composition Root is the only place responsible for wiring Platform Ports with Infrastructure implementations.
+
+No module may instantiate infrastructure services directly.
