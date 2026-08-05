@@ -16,7 +16,6 @@ export interface CreateOrderDto {
     addressLine2?: string;
     city: string;
     postalCode: string;
-    country: string;
     state?: string;
     phone?: string;
   };

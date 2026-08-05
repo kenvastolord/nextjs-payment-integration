@@ -1,2 +1,5 @@
+import { IdGenerator } from "@/ports/identity/IdGenerator";
 
-export interface ApplicationDependencies { }
+export interface ApplicationDependencies {
+  idGenerator: IdGenerator;
+}

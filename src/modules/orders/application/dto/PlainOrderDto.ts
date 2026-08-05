@@ -17,7 +17,6 @@ export interface PlainOrderDto {
     addressLine2?: string;
     city: string;
     postalCode: string;
-    country: string;
     state?: string;
     phone?: string;
   };

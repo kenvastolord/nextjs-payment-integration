@@ -26,7 +26,6 @@ export class OrderResponseMapper {
         addressLine2: order.getShippingAddress().getAddressLine2(),
         city: order.getShippingAddress().getCity(),
         postalCode: order.getShippingAddress().getPostalCode(),
-        country: order.getShippingAddress().getCountry(),
         state: order.getShippingAddress().getState(),
         phone: order.getShippingAddress().getPhone(),
       },

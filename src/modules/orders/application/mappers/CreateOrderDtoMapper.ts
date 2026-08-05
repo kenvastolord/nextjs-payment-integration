@@ -23,7 +23,6 @@ export class CreateOrderDtoMapper {
         addressLine2: shippingForm.addressLine2,
         city: shippingForm.city,
         postalCode: shippingForm.postalCode,
-        country: shippingForm.country,
         state: shippingForm.state,
         phone: shippingForm.phone,
       },

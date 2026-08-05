@@ -35,7 +35,6 @@ export class OrderFactory {
       dto.shippingAddress.addressLine1,
       dto.shippingAddress.city,
       dto.shippingAddress.postalCode,
-      dto.shippingAddress.country,
       dto.shippingAddress.addressLine2,
       dto.shippingAddress.state,
       dto.shippingAddress.phone,

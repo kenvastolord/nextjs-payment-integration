@@ -42,7 +42,9 @@ export function buildOrdersDependencies(
     discountCalculator,
   );
 
-  const orderFactory = new OrderFactory();
+  const orderFactory = new OrderFactory(
+    _application.idGenerator,
+  );
 
   return {
     createOrderUseCase: new CreateOrderUseCase(

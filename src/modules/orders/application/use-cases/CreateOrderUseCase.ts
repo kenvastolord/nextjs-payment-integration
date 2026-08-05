@@ -24,7 +24,6 @@ export class CreateOrderUseCase {
     const checkoutContext: CheckoutContext = {
       items,
       currency: dto.currency,
-      country: shippingAddress.getCountry(),
       postalCode: shippingAddress.getPostalCode(),
     };
 

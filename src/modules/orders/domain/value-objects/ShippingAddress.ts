@@ -5,7 +5,6 @@ export class ShippingAddress {
     private readonly addressLine2: string | undefined,
     private readonly city: string,
     private readonly postalCode: string,
-    private readonly country: string,
     private readonly state?: string,
     private readonly phone?: string,
   ) { }
@@ -15,7 +14,6 @@ export class ShippingAddress {
     addressLine1: string,
     city: string,
     postalCode: string,
-    country: string,
     addressLine2?: string,
     state?: string,
     phone?: string,
@@ -25,7 +23,6 @@ export class ShippingAddress {
     const normalizedAddressLine2 = addressLine2?.trim() || undefined;
     const normalizedCity = city.trim();
     const normalizedPostalCode = postalCode.trim();
-    const normalizedCountry = country.trim().toUpperCase();
     const normalizedState = state?.trim() || undefined;
     const normalizedPhone = phone?.trim() || undefined;
 
@@ -45,9 +42,6 @@ export class ShippingAddress {
       throw new Error("Postal code cannot be empty.");
     }
 
-    if (!normalizedCountry) {
-      throw new Error("Country cannot be empty.");
-    }
 
     return new ShippingAddress(
       normalizedRecipientName,
@@ -55,7 +49,6 @@ export class ShippingAddress {
       normalizedAddressLine2,
       normalizedCity,
       normalizedPostalCode,
-      normalizedCountry,
       normalizedState,
       normalizedPhone,
     );
@@ -85,9 +78,6 @@ export class ShippingAddress {
     return this.postalCode;
   }
 
-  public getCountry(): string {
-    return this.country;
-  }
 
   public getPhone(): string | undefined {
     return this.phone;
@@ -101,7 +91,6 @@ export class ShippingAddress {
       this.city === other.city &&
       this.state === other.state &&
       this.postalCode === other.postalCode &&
-      this.country === other.country &&
       this.phone === other.phone
     );
   }
