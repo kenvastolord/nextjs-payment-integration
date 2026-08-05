@@ -77,29 +77,26 @@ const ProductPage = async ({
         <div className="flex items-center gap-2 mt-4">
           <Image
             src="/klarna.png"
-            alt="klarna"
+            alt="Klarna"
             width={50}
             height={25}
-            sizes="(max-width: 1023px) 100vw, 42vw"
-            className="rounded-md"
+            className="h-auto rounded-md"
           />
 
           <Image
             src="/cards.png"
-            alt="cards"
+            alt="Accepted cards"
             width={50}
             height={25}
-            sizes="(max-width: 1023px) 100vw, 42vw"
-            className="rounded-md"
+            className="h-auto rounded-md"
           />
 
           <Image
             src="/stripe.png"
-            alt="stripe"
+            alt="Stripe"
             width={50}
             height={25}
-            sizes="(max-width: 1023px) 100vw, 42vw"
-            className="rounded-md"
+            className="h-auto rounded-md"
           />
         </div>
 

@@ -1,44 +1,48 @@
 "use client";
+
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { ShoppingCart, Lock } from "lucide-react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   PaymentFormInputs,
   paymentFormSchema,
 } from "@/modules/payments/schemas/payment.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ShoppingCart } from "lucide-react";
-import Image from "next/image";
-import { SubmitHandler, useForm } from "react-hook-form";
 
 import { createOrderAction } from "@/modules/orders/actions/orderActions";
 import { container } from "@/infrastructure/container";
+
 import { CartItemType } from "@/modules/cart/types/cart.types";
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
-import { useRouter } from "next/navigation";
 
-const PaymentForm = ({
-  shippingForm,
-  cart,
-}: {
+type PaymentFormProps = {
   shippingForm: ShippingFormInputs;
   cart: CartItemType[];
-}) => {
+};
+
+function PaymentForm({
+  shippingForm,
+  cart,
+}: PaymentFormProps) {
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<PaymentFormInputs>({
     resolver: zodResolver(paymentFormSchema),
   });
 
-  const handlePaymentForm: SubmitHandler<PaymentFormInputs> = async (data) => {
+  const handlePaymentForm: SubmitHandler<PaymentFormInputs> = async () => {
     try {
-      if (!cart || cart.length === 0) {
+      if (cart.length === 0) {
         alert("Your cart is empty.");
         return;
       }
 
-      // Create the order using Server Action
       const order = await createOrderAction({
         shippingForm,
         cart: cart.map((item) => ({
@@ -51,127 +55,176 @@ const PaymentForm = ({
         })),
       });
 
-      console.log("Order created successfully:", order);
-
-      // Clear the cart
       container.cart.clearCartUseCase.execute();
 
-      // Redirect to confirmation page
       router.push(`/orders/confirmation/${order.id}`);
-    } catch (err: any) {
-      console.error("Order creation failed:", err);
-      alert(`Failed to place order: ${err.message || err}`);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Unknown error";
+
+      alert(`Failed to place order: ${message}`);
     }
   };
 
   return (
     <form
-      className="flex flex-col gap-4"
       onSubmit={handleSubmit(handlePaymentForm)}
+      className="flex flex-col gap-8"
     >
-      <div className="flex flex-col gap-1">
+      {/* Payment Methods */}
+
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-3 text-sm font-medium text-gray-700">
+          Accepted payment methods
+        </p>
+
+        <div className="flex items-center gap-2 mt-4">
+          <Image
+            src="/klarna.png"
+            alt="Klarna"
+            width={50}
+            height={25}
+            className="h-auto rounded-md"
+          />
+
+          <Image
+            src="/cards.png"
+            alt="Accepted cards"
+            width={50}
+            height={25}
+            className="h-auto rounded-md"
+          />
+
+          <Image
+            src="/stripe.png"
+            alt="Stripe"
+            width={50}
+            height={25}
+            className="h-auto rounded-md"
+          />
+        </div>
+      </div>
+
+      {/* Card Holder */}
+
+      <div className="flex flex-col gap-2">
         <label
           htmlFor="cardHolder"
-          className="text-xs text-gray-500 font-medium"
+          className="text-sm font-medium"
         >
           Name on card
         </label>
+
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
-          type="text"
           id="cardHolder"
+          type="text"
           placeholder="John Doe"
           {...register("cardHolder")}
+          className="rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900"
         />
+
         {errors.cardHolder && (
-          <p className="text-xs text-red-500">{errors.cardHolder.message}</p>
-        )}
-      </div>
-      <div className="flex flex-col gap-1">
-        <label
-          htmlFor="cardNumber"
-          className="text-xs text-gray-500 font-medium"
-        >
-          Card Number
-        </label>
-        <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
-          type="text"
-          id="cardNumber"
-          placeholder="123456789123"
-          {...register("cardNumber")}
-        />
-        {errors.cardNumber && (
-          <p className="text-xs text-red-500">{errors.cardNumber.message}</p>
-        )}
-      </div>
-      <div className="flex flex-col gap-1">
-        <label
-          htmlFor="expirationDate"
-          className="text-xs text-gray-500 font-medium"
-        >
-          Expiration Date
-        </label>
-        <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
-          type="text"
-          id="expirationDate"
-          placeholder="01/32"
-          {...register("expirationDate")}
-        />
-        {errors.expirationDate && (
           <p className="text-xs text-red-500">
-            {errors.expirationDate.message}
+            {errors.cardHolder.message}
           </p>
         )}
       </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="cvv" className="text-xs text-gray-500 font-medium">
-          CVV
+
+      {/* Card Number */}
+
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="cardNumber"
+          className="text-sm font-medium"
+        >
+          Card Number
         </label>
+
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          id="cardNumber"
           type="text"
-          id="cvv"
-          placeholder="123"
-          {...register("cvv")}
+          placeholder="1234 5678 9012 3456"
+          {...register("cardNumber")}
+          className="rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900"
         />
-        {errors.cvv && (
-          <p className="text-xs text-red-500">{errors.cvv.message}</p>
+
+        {errors.cardNumber && (
+          <p className="text-xs text-red-500">
+            {errors.cardNumber.message}
+          </p>
         )}
       </div>
-      <div className="flex items-center gap-2 mt-4">
-        <Image
-          src="/klarna.png"
-          alt="klarna"
-          width={50}
-          height={25}
-          className="rounded-md"
-        />
-        <Image
-          src="/cards.png"
-          alt="cards"
-          width={50}
-          height={25}
-          className="rounded-md"
-        />
-        <Image
-          src="/stripe.png"
-          alt="stripe"
-          width={50}
-          height={25}
-          className="rounded-md"
-        />
+
+      {/* Expiration + CVV */}
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="expirationDate"
+            className="text-sm font-medium"
+          >
+            Expiration Date
+          </label>
+
+          <input
+            id="expirationDate"
+            type="text"
+            placeholder="MM/YY"
+            {...register("expirationDate")}
+            className="rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900"
+          />
+
+          {errors.expirationDate && (
+            <p className="text-xs text-red-500">
+              {errors.expirationDate.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="cvv"
+            className="text-sm font-medium"
+          >
+            CVV
+          </label>
+
+          <input
+            id="cvv"
+            type="password"
+            placeholder="123"
+            {...register("cvv")}
+            className="rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-gray-900"
+          />
+
+          {errors.cvv && (
+            <p className="text-xs text-red-500">
+              {errors.cvv.message}
+            </p>
+          )}
+        </div>
       </div>
+
+      {/* Security */}
+
+      <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3 text-sm text-gray-600">
+        <Lock className="h-4 w-4" />
+        <span>Your payment information is securely encrypted.</span>
+      </div>
+
+      {/* Submit */}
+
       <button
         type="submit"
-        className="w-full bg-gray-800 hover:bg-gray-900 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
+        disabled={isSubmitting}
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 py-3 font-medium text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Checkout
-        <ShoppingCart className="w-3 h-3" />
+        <ShoppingCart className="h-4 w-4" />
+
+        {isSubmitting ? "Processing..." : "Complete Order"}
       </button>
     </form>
   );
-};
+}
 
 export default PaymentForm;

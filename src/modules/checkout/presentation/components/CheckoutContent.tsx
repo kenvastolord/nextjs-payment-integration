@@ -1,3 +1,5 @@
+import type { RefObject } from "react";
+
 import CartItemsList from "@/modules/cart/presentation/components/CartItemList";
 import PaymentForm from "@/modules/payments/presentation/components/PaymentForm";
 
@@ -10,20 +12,25 @@ type CheckoutContentProps = {
   activeStep: number;
   cart: CartItemType[];
   shippingForm?: ShippingFormInputs;
-  setShippingForm: (data: ShippingFormInputs) => void;
+
+  onShippingSubmit: (data: ShippingFormInputs) => void;
+
   onRemoveCartItem: (item: CartItemType) => void;
   onIncreaseQuantity: (item: CartItemType) => void;
   onDecreaseQuantity: (item: CartItemType) => void;
+
+  shippingFormRef: RefObject<HTMLFormElement | null>;
 };
 
 function CheckoutContent({
   activeStep,
   cart,
   shippingForm,
-  setShippingForm,
+  onShippingSubmit,
   onRemoveCartItem,
   onIncreaseQuantity,
   onDecreaseQuantity,
+  shippingFormRef,
 }: CheckoutContentProps) {
   switch (activeStep) {
     case 1:
@@ -39,8 +46,9 @@ function CheckoutContent({
     case 2:
       return (
         <ShippingForm
+          ref={shippingFormRef}
           shippingForm={shippingForm}
-          setShippingForm={setShippingForm}
+          onSubmit={onShippingSubmit}
         />
       );
 
@@ -57,7 +65,11 @@ function CheckoutContent({
       );
 
     default:
-      return <p className="text-sm text-gray-500">Invalid checkout step.</p>;
+      return (
+        <p className="text-sm text-gray-500">
+          Invalid checkout step.
+        </p>
+      );
   }
 }
 

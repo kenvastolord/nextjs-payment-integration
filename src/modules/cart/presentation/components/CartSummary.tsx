@@ -1,71 +1,61 @@
-import { ArrowRight } from "lucide-react";
 import { CartItemType } from "../../types/cart.types";
 
 type CartSummaryProps = {
-  activeStep: number;
-  shippingCompleted: boolean;
   cart: CartItemType[];
-  onNextStep: () => void;
-  onPreviousStep: () => void;
 };
 
-function CartSummary({
-  activeStep,
-  shippingCompleted,
-  cart,
-  onNextStep,
-  onPreviousStep,
-}: CartSummaryProps) {
+function CartSummary({ cart }: CartSummaryProps) {
+  const subtotal = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
+
   return (
-    <div className="w-full lg:w-5/12 shadow-lg border-1 border-gray-100 p-8 rounded-lg flex flex-col gap-8 h-max">
-      <h2 className="font-semibold">Cart Details</h2>
-      <div className="flex flex-col gap-4">
+    <div className="w-full lg:w-5/12 rounded-lg border border-gray-100 p-8 shadow-lg h-max">
+      <h2 className="mb-8 text-lg font-semibold">
+        Order Summary
+      </h2>
+
+      <div className="space-y-4">
         <div className="flex justify-between text-sm">
-          <p className="text-gray-500">Subtotal</p>
-          <p className="font-medium">
-            $
-            {cart
-              .reduce((acc, item) => acc + item.price * item.quantity, 0)
-              .toFixed(2)}
-          </p>
+          <span className="text-gray-500">
+            Subtotal
+          </span>
+
+          <span className="font-medium">
+            ${subtotal.toFixed(2)}
+          </span>
         </div>
+
         <div className="flex justify-between text-sm">
-          <p className="text-gray-500">Discount(10%)</p>
-          <p className="font-medium">$ 10</p>
+          <span className="text-gray-500">
+            Discount
+          </span>
+
+          <span className="font-medium">
+            $0.00
+          </span>
         </div>
+
         <div className="flex justify-between text-sm">
-          <p className="text-gray-500">Shipping Fee</p>
-          <p className="font-medium">$10</p>
+          <span className="text-gray-500">
+            Shipping
+          </span>
+
+          <span className="font-medium">
+            $10.00
+          </span>
         </div>
+
         <hr className="border-gray-200" />
-        <div className="flex justify-between">
-          <p className="text-gray-800 font-semibold">Total</p>
-          <p className="font-medium">
-            $
-            {cart
-              .reduce((acc, item) => acc + item.price * item.quantity, 0)
-              .toFixed(2)}
-          </p>
+
+        <div className="flex justify-between text-base font-semibold">
+          <span>Total</span>
+
+          <span>
+            ${subtotal.toFixed(2)}
+          </span>
         </div>
-      </div>
-      <div className="flex gap-4">
-        {activeStep > 1 && (
-          <button
-            onClick={onPreviousStep}
-            className="flex-1 bg-gray-200 hover:bg-gray-300 transition-all duration-300 text-gray-800 p-2 rounded-lg cursor-pointer"
-          >
-            Back
-          </button>
-        )}
-        {activeStep < 3 && !(activeStep === 2 && !shippingCompleted) && (
-          <button
-            onClick={onNextStep}
-            className="flex-1 bg-gray-800 hover:bg-gray-900 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
-          >
-            Continue
-            <ArrowRight className="w-3 h-3" />
-          </button>
-        )}
       </div>
     </div>
   );

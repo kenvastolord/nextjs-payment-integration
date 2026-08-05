@@ -1,14 +1,14 @@
 export const CHECKOUT_STEPS = [
   {
     id: 1,
-    title: "Shopping Cart",
+    title: "Your Order",
   },
   {
     id: 2,
-    title: "Shipping Address",
+    title: "Delivery Information",
   },
   {
     id: 3,
-    title: "Payment Method",
+    title: "Payment",
   },
 ];
