@@ -244,7 +244,7 @@ Payment confirmation may trigger Order state transitions, but Orders remain resp
 ```text
 CREATED
 CONFIRMED
-PROCESSING
+PREPARING
 SHIPPED
 DELIVERED
 CANCELLED
