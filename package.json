@@ -17,6 +17,8 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.61.1",
+    "react-phone-number-input": "^3.4.17",
+    "react-select": "^5.10.2",
     "react-toastify": "^11.0.5",
     "typecheck": "^0.1.2",
     "uuid": "^14.0.1",

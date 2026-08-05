@@ -17,10 +17,11 @@ function CartItemsList({
 }: CartItemsListProps) {
   return (
     <>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <CartItem
           key={`${item.id}-${item.selectedSize}-${item.selectedColor}`}
           item={item}
+          preloadImage={index === 0}
           onRemove={onRemove}
           onIncreaseQuantity={onIncreaseQuantity}
           onDecreaseQuantity={onDecreaseQuantity}

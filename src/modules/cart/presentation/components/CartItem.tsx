@@ -5,6 +5,7 @@ import { CartItemType } from "../../types/cart.types";
 
 type CartItemProps = {
   item: CartItemType;
+  preloadImage?: boolean;
   onRemove: (item: CartItemType) => void;
   onIncreaseQuantity: (item: CartItemType) => void;
   onDecreaseQuantity: (item: CartItemType) => void;
@@ -12,6 +13,7 @@ type CartItemProps = {
 
 function CartItem({
   item,
+  preloadImage,
   onRemove,
   onIncreaseQuantity,
   onDecreaseQuantity,
@@ -27,6 +29,7 @@ function CartItem({
           alt={item.name}
           fill
           sizes="112px"
+          preload={preloadImage}
           className="object-contain"
         />
       </div>
