@@ -9,43 +9,40 @@ export class CreateOrderDtoMapper {
   ): CreateOrderDto {
     const { shippingForm, cart } = request;
 
-    const nameParts = shippingForm.name.trim().split(/\s+/);
-
     return {
-      // TODO: Reemplazar por UUID v7 cuando exista el servicio de generación de IDs.
-      id: `order-${Date.now()}`,
-
       customer: {
-        firstName: nameParts[0] ?? "Guest",
-        lastName: nameParts.slice(1).join(" ") || "Customer",
+        firstName: shippingForm.firstName.trim() || "Guest",
+        lastName: shippingForm.lastName.trim() || "Customer",
         email: shippingForm.email,
         phone: shippingForm.phone,
       },
 
       shippingAddress: {
-        recipientName: shippingForm.name,
-        addressLine1: shippingForm.address,
+        recipientName: `${shippingForm.firstName} ${shippingForm.lastName}`.trim(),
+        addressLine1: shippingForm.addressLine1,
+        addressLine2: shippingForm.addressLine2,
         city: shippingForm.city,
-        postalCode: "10001",
-        country: "US",
+        postalCode: shippingForm.postalCode,
+        country: shippingForm.country,
+        state: shippingForm.state,
         phone: shippingForm.phone,
       },
 
       items: cart.map((item) => ({
         productId: String(item.id),
+
+        // TODO: Use the catalog SKU once product integration is available.
         sku: `${item.id}-${item.selectedColor ?? "default"}-${item.selectedSize ?? "default"}`,
+
         name: item.name,
+        // TODO: Use catalog prices already normalized to minor units.
         originalUnitPrice: item.price,
         finalUnitPrice: item.price,
+
         quantity: item.quantity,
       })),
 
       currency: DEFAULT_CURRENCY,
-
-      // Estos valores serán recalculados por OrderPricingService.
-      shipping: 0,
-      taxes: 0,
-      discount: 0,
     };
   }
 }

@@ -15,6 +15,13 @@ export class ZustandCartRepository implements CartRepository {
     useCartStore.getState().removeFromCart(product);
   }
 
+  increaseQuantity(product: CartItemType): void {
+    useCartStore.getState().increaseQuantity(product);
+  }
+
+  decreaseQuantity(product: CartItemType): void {
+    useCartStore.getState().decreaseQuantity(product);
+  }
   clear(): void {
     useCartStore.getState().clearCart();
   }

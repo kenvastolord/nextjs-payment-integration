@@ -10,7 +10,7 @@ export class FlatRateShippingCalculator implements ShippingCalculator {
 
   calculate(context: CheckoutContext): Money {
     const subtotal = context.items.reduce(
-      (sum, item) => sum + item.getLineTotal().getAmount(),
+      (sum, item) => sum + item.getLineTotal().getMinorAmount(),
       0,
     );
 

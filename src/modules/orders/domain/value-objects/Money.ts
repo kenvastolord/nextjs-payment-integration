@@ -1,12 +1,12 @@
 export class Money {
   private constructor(
-    private readonly amount: number,
+    private readonly amount: number, // Minor units
     private readonly currency: string,
   ) { }
 
   public static create(amount: number, currency: string): Money {
-    if (!Number.isFinite(amount)) {
-      throw new Error("Amount must be a valid number.");
+    if (!Number.isInteger(amount)) {
+      throw new Error("Amount must be an integer representing minor units.");
     }
 
     if (amount < 0) {
@@ -26,12 +26,20 @@ export class Money {
     return new Money(amount, normalizedCurrency);
   }
 
-  public getAmount(): number {
+  public static zero(currency: string): Money {
+    return Money.create(0, currency);
+  }
+
+  public getMinorAmount(): number {
     return this.amount;
   }
 
   public getCurrency(): string {
     return this.currency;
+  }
+
+  public toDecimal(): number {
+    return this.amount / 100;
   }
 
   public equals(other: Money): boolean {
@@ -41,9 +49,6 @@ export class Money {
     );
   }
 
-  public toString(): string {
-    return `${this.amount} ${this.currency}`;
-  }
   public add(other: Money): Money {
     this.assertSameCurrency(other);
 
@@ -66,7 +71,6 @@ export class Money {
     );
   }
 
-
   public multiply(multiplier: number): Money {
     if (!Number.isInteger(multiplier)) {
       throw new Error("Multiplier must be an integer.");
@@ -82,15 +86,13 @@ export class Money {
     );
   }
 
+  public toString(): string {
+    return `${this.toDecimal().toFixed(2)} ${this.currency}`;
+  }
+
   private assertSameCurrency(other: Money): void {
     if (this.currency !== other.currency) {
       throw new Error("Cannot operate with different currencies.");
     }
   }
-
-  public static zero(currency: string): Money {
-    return Money.create(0, currency);
-  }
-
 }
-

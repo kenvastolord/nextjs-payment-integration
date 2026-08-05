@@ -15,6 +15,7 @@ export class CreateOrderUseCase {
 
   async execute(dto: CreateOrderDto): Promise<Order> {
     const {
+      id,
       customerSnapshot,
       shippingAddress,
       items,
@@ -27,12 +28,10 @@ export class CreateOrderUseCase {
       postalCode: shippingAddress.getPostalCode(),
     };
 
-    const totals = this.orderPricingService.calculate(
-      checkoutContext,
-    );
+    const totals = this.orderPricingService.calculate(checkoutContext);
 
     const order = Order.create({
-      id: dto.id,
+      id,
       customerId: dto.customerId,
       customerSnapshot,
       shippingAddress,

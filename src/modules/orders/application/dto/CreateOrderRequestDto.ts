@@ -1,11 +1,7 @@
+import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
+
 export interface CreateOrderRequestDto {
-  shippingForm: {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-  };
+  shippingForm: ShippingFormInputs;
 
   cart: Array<{
     id: string | number;

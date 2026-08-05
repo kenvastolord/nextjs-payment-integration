@@ -1,0 +1,24 @@
+.PhoneInput {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  border-bottom: 1px solid rgb(229 231 235);
+  padding: 0.5rem 0;
+}
+
+.PhoneInputInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.875rem;
+}
+
+.PhoneInputCountry {
+  margin-right: 0.5rem;
+}
+
+.PhoneInputCountrySelect {
+  cursor: pointer;
+}

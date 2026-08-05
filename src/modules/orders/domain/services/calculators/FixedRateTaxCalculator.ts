@@ -9,11 +9,11 @@ export class FixedRateTaxCalculator implements TaxCalculator {
 
   calculate(context: CheckoutContext): Money {
     const subtotal = context.items.reduce(
-      (sum, item) => sum + item.getLineTotal().getAmount(),
+      (sum, item) => sum + item.getLineTotal().getMinorAmount(),
       0,
     );
 
-    const tax = Number((subtotal * this.rate).toFixed(2));
+    const tax = Math.round(subtotal * this.rate);
 
     return Money.create(tax, context.currency);
   }

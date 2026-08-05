@@ -12,6 +12,8 @@ type CheckoutContentProps = {
   shippingForm?: ShippingFormInputs;
   setShippingForm: (data: ShippingFormInputs) => void;
   onRemoveCartItem: (item: CartItemType) => void;
+  onIncreaseQuantity: (item: CartItemType) => void;
+  onDecreaseQuantity: (item: CartItemType) => void;
 };
 
 function CheckoutContent({
@@ -20,10 +22,19 @@ function CheckoutContent({
   shippingForm,
   setShippingForm,
   onRemoveCartItem,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
 }: CheckoutContentProps) {
   switch (activeStep) {
     case 1:
-      return <CartItemsList items={cart} onRemove={onRemoveCartItem} />;
+      return (
+        <CartItemsList
+          items={cart}
+          onRemove={onRemoveCartItem}
+          onIncreaseQuantity={onIncreaseQuantity}
+          onDecreaseQuantity={onDecreaseQuantity}
+        />
+      );
 
     case 2:
       return (
@@ -35,7 +46,10 @@ function CheckoutContent({
 
     case 3:
       return shippingForm ? (
-        <PaymentForm shippingForm={shippingForm} cart={cart} />
+        <PaymentForm
+          shippingForm={shippingForm}
+          cart={cart}
+        />
       ) : (
         <p className="text-sm text-gray-500">
           Please fill in the shipping form to continue.

@@ -1,5 +1,4 @@
 export interface CreateOrderDto {
-  id: string;
   customerId?: string;
 
   customer: {
@@ -26,14 +25,21 @@ export interface CreateOrderDto {
     productId: string;
     sku: string;
     name: string;
+
+    /**
+     * Price in minor units (e.g. cents).
+     * Values must already be normalized by the Products module.
+     */
     originalUnitPrice: number;
+
+    /**
+     * Price in minor units (e.g. cents).
+     * Values must already be normalized by the Products module.
+     */
     finalUnitPrice: number;
+
     quantity: number;
   }>;
 
   currency: string;
-
-  shipping: number;
-  taxes: number;
-  discount: number;
 }

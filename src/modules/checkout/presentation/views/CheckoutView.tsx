@@ -11,6 +11,8 @@ function CheckoutView() {
     activeStep,
     cart,
     removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
     shippingForm,
     setShippingForm,
     goToStep,
@@ -30,6 +32,8 @@ function CheckoutView() {
             shippingForm={shippingForm}
             setShippingForm={setShippingForm}
             onRemoveCartItem={removeFromCart}
+            onIncreaseQuantity={increaseQuantity}
+            onDecreaseQuantity={decreaseQuantity}
           />
         </div>
 

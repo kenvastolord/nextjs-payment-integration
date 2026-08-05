@@ -1,17 +1,24 @@
 import { CreateOrderDto } from "../dto/CreateOrderDto";
 
+import { IdGenerator } from "@/ports/identity/IdGenerator";
+
 import { OrderItem } from "@/modules/orders/domain/entities/OrderItem";
 import { CustomerSnapshot } from "@/modules/orders/domain/value-objects/CustomerSnapshot";
 import { Money } from "@/modules/orders/domain/value-objects/Money";
 import { ShippingAddress } from "@/modules/orders/domain/value-objects/ShippingAddress";
 
 export interface OrderFactoryResult {
+  id: string;
   customerSnapshot: CustomerSnapshot;
   shippingAddress: ShippingAddress;
   items: OrderItem[];
 }
 
 export class OrderFactory {
+  constructor(
+    private readonly idGenerator: IdGenerator,
+  ) { }
+
   create(dto: CreateOrderDto): OrderFactoryResult {
     const customerSnapshot = CustomerSnapshot.create(
       dto.customer.firstName,
@@ -56,6 +63,7 @@ export class OrderFactory {
     });
 
     return {
+      id: this.idGenerator.generate(),
       customerSnapshot,
       shippingAddress,
       items,

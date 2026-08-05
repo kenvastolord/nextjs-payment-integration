@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import useCartStore from "@/modules/cart/store/cartStore";
-
-import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
 import { container } from "@/infrastructure/container";
+
+import useCartStore from "@/modules/cart/store/cartStore";
 import { CartItemType } from "@/modules/cart/types/cart.types";
+import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
 
 export function useCheckout() {
   const router = useRouter();
@@ -23,6 +23,14 @@ export function useCheckout() {
     container.cart.removeFromCartUseCase.execute(item);
   };
 
+  const increaseQuantity = (item: CartItemType) => {
+    container.cart.increaseItemQuantityUseCase.execute(item);
+  };
+
+  const decreaseQuantity = (item: CartItemType) => {
+    container.cart.decreaseItemQuantityUseCase.execute(item);
+  };
+
   const goToStep = (step: number) => {
     router.push(`/cart?step=${step}`, {
       scroll: false,
@@ -33,7 +41,10 @@ export function useCheckout() {
     activeStep,
 
     cart,
+
     removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
 
     shippingForm,
     setShippingForm,

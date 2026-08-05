@@ -1,51 +1,112 @@
-import { Trash2 } from "lucide-react";
-import { CartItemType } from "../../types/cart.types";
 import Image from "next/image";
+import { Trash2, Minus, Plus } from "lucide-react";
+
+import { CartItemType } from "../../types/cart.types";
 
 type CartItemProps = {
   item: CartItemType;
   onRemove: (item: CartItemType) => void;
+  onIncreaseQuantity: (item: CartItemType) => void;
+  onDecreaseQuantity: (item: CartItemType) => void;
 };
 
-const CartItem = ({ item, onRemove }: CartItemProps) => {
+function CartItem({
+  item,
+  onRemove,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
+}: CartItemProps) {
+  const subtotal = item.price * item.quantity;
+
   return (
-    <div
-      className="flex items-center justify-between"
-      key={item.id + item.selectedSize + item.selectedColor}
-    >
-      {/* IMAGE AND DETAILS */}
-      <div className="flex gap-8">
-        {/* IMAGE */}
-        <div className="relative w-32 h-32 bg-gray-50 rounded-lg overflow-hidden">
-          <Image
-            src={item.images[item.selectedColor]}
-            alt={item.name}
-            fill
-            sizes="128px"
-            className="object-contain"
-          />
+    <div className="flex gap-6 rounded-lg border border-gray-200 bg-white p-5">
+      {/* Product Image */}
+      <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg bg-gray-50">
+        <Image
+          src={item.images[item.selectedColor]}
+          alt={item.name}
+          fill
+          sizes="112px"
+          className="object-contain"
+        />
+      </div>
+
+      {/* Product Information */}
+      <div className="flex flex-1 flex-col">
+        {/* Header */}
+        <div className="flex items-start justify-between">
+          <h3 className="text-base font-semibold text-gray-900">
+            {item.name}
+          </h3>
+
+          <button
+            type="button"
+            onClick={() => onRemove(item)}
+            className="flex items-center gap-1 text-sm text-red-500 hover:text-red-600"
+          >
+            <Trash2 className="h-4 w-4" />
+            Remove
+          </button>
         </div>
-        {/* ITEM DETAILS */}
-        <div className="flex flex-col justify-between">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm font-medium">{item.name}</p>
-            <p className="text-xs text-gray-500">Quantity: {item.quantity}</p>
-            <p className="text-xs text-gray-500">Size: {item.selectedSize}</p>
-            <p className="text-xs text-gray-500">Color: {item.selectedColor}</p>
+
+        {/* Attributes */}
+        <div className="mt-3 space-y-1 text-sm text-gray-600">
+          <p>
+            <span className="font-medium">Color:</span>{" "}
+            {item.selectedColor}
+          </p>
+
+          <p>
+            <span className="font-medium">Size:</span>{" "}
+            {item.selectedSize}
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-auto flex items-end justify-between pt-6">
+          <div>
+            <p className="text-sm text-gray-500">Price</p>
+
+            <p className="text-lg font-semibold">
+              ${subtotal.toFixed(2)}
+            </p>
           </div>
-          <p className="font-medium">${item.price.toFixed(2)}</p>
+
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-500">Quantity</span>
+
+            <div className="flex items-center rounded-md border border-gray-200">
+              <button
+                type="button"
+                onClick={() => onDecreaseQuantity(item)}
+                disabled={item.quantity === 1}
+                className={`p-2 transition-colors ${item.quantity === 1
+                  ? "cursor-not-allowed text-gray-300"
+                  : "hover:bg-gray-100"
+                  }`}
+                aria-label="Decrease quantity"
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+
+              <span className="min-w-10 text-center text-sm font-medium">
+                {item.quantity}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => onIncreaseQuantity(item)}
+                className="p-2 hover:bg-gray-100"
+                aria-label="Increase quantity"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-      {/* DELETE BUTTON */}
-      <button
-        type="button"
-        onClick={() => onRemove(item)}
-        className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 transition-all duration-300 text-red-400 flex items-center justify-center cursor-pointer"
-      >
-        <Trash2 className="w-3 h-3" />
-      </button>
     </div>
   );
-};
+}
 
 export default CartItem;
