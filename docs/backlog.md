@@ -181,3 +181,15 @@ Price normalization must occur only once at the infrastructure boundary, before 
 - [ ] Ensure all downstream modules receive already normalized prices.
 - [ ] Add unit tests covering price normalization from different provider formats.
 - [ ] Document the expected contract for future product providers.
+
+
+# Paymemnt and Checkout Monitoring
+
+## Ecommerce Payment health
+
+- Payment success rate
+- Checkout conversion 
+- Faild Payments 
+- Webhook failues 
+- Duplicate attemps
+-unmatched Payments

@@ -26,7 +26,7 @@ Changing or adding providers should not require modifications to the application
 
 ## Decision
 
-The application will define its own payment abstraction through a `PaymentService` interface.
+The application will define its own payment abstraction through a `PaymentGateway` interface.
 
 Business use cases will depend only on this abstraction.
 
@@ -41,7 +41,7 @@ Presentation
 Application
         │
         ▼
-PaymentService
+PaymentGateway
         │
         ▼
 Infrastructure
@@ -61,7 +61,7 @@ Allowed:
 Checkout Use Case
         │
         ▼
-PaymentService
+PaymentGateway
 ```
 
 Not allowed:
@@ -89,7 +89,7 @@ The domain has no knowledge of external payment providers.
 
 ### Application
 
-Coordinates payment execution through the `PaymentService` abstraction.
+Coordinates payment execution through the `PaymentGateway` abstraction.
 
 It does not know which provider is being used.
 

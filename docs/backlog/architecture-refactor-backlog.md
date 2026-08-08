@@ -1,12 +1,12 @@
-# Architecture Refactor Backlog
+# Architecture refactor backlog
 
-Este documento recopila mejoras detectadas durante el proceso de refactorización arquitectónica.
+This document collects improvements identified during the architectural refactor process.
 
-## Reglas
+## Rules
 
-- No implementar estas tareas durante el refactor salvo que bloqueen el avance.
-- Cada tarea debe estar asociada a una decisión técnica o arquitectónica.
-- Al finalizar la migración, se priorizarán y convertirán en issues o tareas del roadmap.
+- Do not implement these tasks during the refactor unless they block progress.
+- Each task should be associated with a technical or architectural decision.
+- At the end of the migration, they will be prioritized and converted into roadmap issues or tasks.
 
 ---
 
@@ -14,19 +14,19 @@ Este documento recopila mejoras detectadas durante el proceso de refactorizació
 
 ### Add `sizes` to Next.js Image components
 
-**Estado**
+**Status**
 
 - Pending
 
-**Prioridad**
+**Priority**
 
 - Medium
 
-**Motivo**
+**Reason**
 
-Los componentes que utilizan `next/image` con la propiedad `fill` deben definir `sizes` para que Next.js pueda generar imágenes optimizadas según el viewport.
+Components using `next/image` with the `fill` property should define `sizes` so that Next.js can generate optimized images based on the viewport.
 
-**Archivos afectados**
+**Affected files**
 
 - `modules/products/presentation/components/ProductCard.tsx`
 
@@ -40,7 +40,7 @@ _No tasks yet._
 
 ## Cart
 
-### Domain Model
+### Domain model
 
 - [ ] Decouple CartItem from ProductType.
 - [ ] Introduce a dedicated CartItem domain model.
@@ -73,17 +73,17 @@ _No tasks yet._
 
 ### Architecture
 
-- [ ] Design the PaymentService abstraction.
+- [ ] Design the PaymentGateway abstraction.
 - [ ] Isolate payment providers behind the infrastructure layer.
 - [ ] Prevent presentation components from depending on payment providers.
-- [ ] Define the PaymentService interface.
-- [ ] Implement the Stripe provider behind the PaymentService abstraction.
+- [ ] Define the PaymentGateway interface.
+- [ ] Implement the Stripe provider behind the PaymentGateway abstraction.
 - [ ] Ensure the application layer is provider-agnostic.
 - [ ] Prevent business logic from depending on payment SDKs.
 
 ### Integration
 
-- [ ] Integrate Stripe provider.
+- [ ] Integrate the Stripe provider.
 - [ ] Create payment intents.
 - [ ] Handle payment confirmation and failures.
 - [ ] Persist payment transactions.
