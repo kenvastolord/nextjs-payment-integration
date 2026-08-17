@@ -2,7 +2,6 @@ import type { RefObject } from "react";
 
 import CartItemsList from "@/modules/cart/presentation/components/CartItemList";
 import PaymentForm from "@/modules/payments/presentation/components/PaymentForm";
-
 import ShippingForm from "./ShippingForm";
 
 import { CartItemType } from "@/modules/cart/types/cart.types";
@@ -12,13 +11,11 @@ type CheckoutContentProps = {
   activeStep: number;
   cart: CartItemType[];
   shippingForm?: ShippingFormInputs;
-
   onShippingSubmit: (data: ShippingFormInputs) => void;
-
+  onPaymentSubmit: () => Promise<void>;
   onRemoveCartItem: (item: CartItemType) => void;
   onIncreaseQuantity: (item: CartItemType) => void;
   onDecreaseQuantity: (item: CartItemType) => void;
-
   shippingFormRef: RefObject<HTMLFormElement | null>;
 };
 
@@ -27,6 +24,7 @@ function CheckoutContent({
   cart,
   shippingForm,
   onShippingSubmit,
+  onPaymentSubmit,
   onRemoveCartItem,
   onIncreaseQuantity,
   onDecreaseQuantity,
@@ -54,10 +52,7 @@ function CheckoutContent({
 
     case 3:
       return shippingForm ? (
-        <PaymentForm
-          shippingForm={shippingForm}
-          cart={cart}
-        />
+        <PaymentForm onSubmit={onPaymentSubmit} />
       ) : (
         <p className="text-sm text-gray-500">
           Please fill in the shipping form to continue.

@@ -1,11 +1,14 @@
 "use client";
 
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 
 import CartSummary from "@/modules/cart/presentation/components/CartSummary";
-
 import CheckoutContent from "./CheckoutContent";
 import CheckoutNavigation from "./CheckoutNavigation";
+
+import { submitCheckoutAction } from "@/modules/checkout/actions/checkoutActions";
+import { container } from "@/infrastructure/container";
 
 import { CartItemType } from "@/modules/cart/types/cart.types";
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
@@ -15,11 +18,9 @@ type CheckoutFlowProps = {
   cart: CartItemType[];
   shippingForm?: ShippingFormInputs;
   setShippingForm: (data: ShippingFormInputs) => void;
-
   onRemoveCartItem: (item: CartItemType) => void;
   onIncreaseQuantity: (item: CartItemType) => void;
   onDecreaseQuantity: (item: CartItemType) => void;
-
   onNextStep: () => void;
   onPreviousStep: () => void;
 };
@@ -35,6 +36,7 @@ function CheckoutFlow({
   onNextStep,
   onPreviousStep,
 }: CheckoutFlowProps) {
+  const router = useRouter();
   const shippingFormRef = useRef<HTMLFormElement>(null);
 
   const handleNextStep = () => {
@@ -42,15 +44,37 @@ function CheckoutFlow({
       shippingFormRef.current?.requestSubmit();
       return;
     }
-
     onNextStep();
   };
 
-  const handleShippingSubmit = (
-    data: ShippingFormInputs,
-  ) => {
+  const handleShippingSubmit = (data: ShippingFormInputs) => {
     setShippingForm(data);
     onNextStep();
+  };
+
+  const handlePaymentSubmit = async () => {
+    if (!shippingForm || cart.length === 0) return;
+
+    try {
+      const order = await submitCheckoutAction({
+        shippingForm,
+        cart: cart.map((item) => ({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          selectedColor: item.selectedColor,
+          selectedSize: item.selectedSize,
+        })),
+      });
+
+      container.cart.clearCartUseCase.execute();
+      router.push(`/orders/confirmation/${order.id}`);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Unknown error";
+      alert(`Failed to place order: ${message}`);
+    }
   };
 
   return (
@@ -61,19 +85,18 @@ function CheckoutFlow({
           cart={cart}
           shippingForm={shippingForm}
           onShippingSubmit={handleShippingSubmit}
+          onPaymentSubmit={handlePaymentSubmit}
           onRemoveCartItem={onRemoveCartItem}
           onIncreaseQuantity={onIncreaseQuantity}
           onDecreaseQuantity={onDecreaseQuantity}
           shippingFormRef={shippingFormRef}
         />
-
         <CheckoutNavigation
           activeStep={activeStep}
           onNextStep={handleNextStep}
           onPreviousStep={onPreviousStep}
         />
       </div>
-
       <CartSummary cart={cart} />
     </div>
   );
