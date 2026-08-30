@@ -1,4 +1,5 @@
 import { OrderStatus } from "../enums/OrderStatus";
+import { PaymentStatus } from "../enums/PaymentStatus";
 import { EmptyOrderError } from "../errors/EmptyOrderError";
 import { InvalidOrderStatusTransitionError } from "../errors/InvalidOrderStatusTransitionError";
 import { OrderAlreadyInStatusError } from "../errors/OrderAlreadyInStatusError";
@@ -25,6 +26,7 @@ export class Order {
     private readonly items: OrderItem[],
     private readonly totals: OrderTotals,
     private status: OrderStatus,
+    private paymentStatus: PaymentStatus,
     private readonly createdAt: Date,
     private updatedAt: Date,
   ) { }
@@ -66,6 +68,7 @@ export class Order {
       [...items],
       totals,
       OrderStatus.CREATED,
+      PaymentStatus.PENDING,
       now,
       now,
     );
@@ -97,6 +100,10 @@ export class Order {
 
   public getStatus(): OrderStatus {
     return this.status;
+  }
+
+  public getPaymentStatus(): PaymentStatus {
+    return this.paymentStatus;
   }
 
   public getCreatedAt(): Date {
@@ -140,6 +147,54 @@ export class Order {
     }
 
     this.status = OrderStatus.CANCELLED;
+    this.updatedAt = new Date();
+  }
+
+  public markPaymentAsPaid(): void {
+    if (this.paymentStatus === PaymentStatus.PAID) {
+      throw new Error("Payment is already marked as paid.");
+    }
+
+    if (
+      this.paymentStatus !== PaymentStatus.PENDING &&
+      this.paymentStatus !== PaymentStatus.FAILED
+    ) {
+      throw new Error(
+        `Cannot mark payment as paid from status: ${this.paymentStatus}`,
+      );
+    }
+
+    this.paymentStatus = PaymentStatus.PAID;
+    this.updatedAt = new Date();
+  }
+
+  public markPaymentAsFailed(): void {
+    if (this.paymentStatus === PaymentStatus.FAILED) {
+      throw new Error("Payment is already marked as failed.");
+    }
+
+    if (this.paymentStatus !== PaymentStatus.PENDING) {
+      throw new Error(
+        `Cannot mark payment as failed from status: ${this.paymentStatus}`,
+      );
+    }
+
+    this.paymentStatus = PaymentStatus.FAILED;
+    this.updatedAt = new Date();
+  }
+
+  public refundPayment(): void {
+    if (this.paymentStatus === PaymentStatus.REFUNDED) {
+      throw new Error("Payment is already refunded.");
+    }
+
+    if (this.paymentStatus !== PaymentStatus.PAID) {
+      throw new Error(
+        `Cannot refund payment that is not paid. Current status: ${this.paymentStatus}`,
+      );
+    }
+
+    this.paymentStatus = PaymentStatus.REFUNDED;
     this.updatedAt = new Date();
   }
 
