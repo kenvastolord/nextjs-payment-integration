@@ -1,6 +1,6 @@
-import { PaymentGateway } from "@/modules/payments/domain/services/PaymentGateway";
-import { PaymentRepository } from "@/modules/payments/domain/repositories/PaymentRepository";
 import { StartPaymentUseCase } from "@/modules/payments/application/use-cases/StartPaymentUseCase";
+import { InMemoryPaymentRepository } from "@/modules/payments/infrastructure/repositories/InMemoryPaymentRepository";
+import { StripePaymentService } from "@/infrastructure/payment/StripePaymentService";
 import { ApplicationDependencies } from "./ApplicationDependencies";
 import { OrdersDependencies } from "./OrdersDependencies";
 import { PaymentsDependencies } from "./PaymentsDependencies";
@@ -8,9 +8,10 @@ import { PaymentsDependencies } from "./PaymentsDependencies";
 export function buildPaymentsDependencies(
   application: ApplicationDependencies,
   orders: OrdersDependencies,
-  paymentGateway: PaymentGateway,
-  paymentRepository: PaymentRepository,
 ): PaymentsDependencies {
+  const paymentRepository = new InMemoryPaymentRepository();
+  const paymentGateway = new StripePaymentService();
+
   return {
     startPaymentUseCase: new StartPaymentUseCase(
       orders.getOrderByIdUseCase,

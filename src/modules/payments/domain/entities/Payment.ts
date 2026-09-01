@@ -39,7 +39,7 @@ export class Payment {
       props.paymentMethod,
       props.amountMinorUnits,
       props.currency,
-      PaymentStatus.PENDING_PAYMENT,
+      PaymentStatus.PENDING,
       props.redirectUrl,
       now,
       now,
@@ -91,7 +91,7 @@ export class Payment {
   }
 
   public markAsPaid(): void {
-    if (this.status !== PaymentStatus.PENDING_PAYMENT) {
+    if (this.status !== PaymentStatus.PENDING) {
       throw new Error(
         `Cannot mark payment as paid from status: ${this.status}`,
       );
@@ -101,12 +101,22 @@ export class Payment {
   }
 
   public markAsFailed(): void {
-    if (this.status !== PaymentStatus.PENDING_PAYMENT) {
+    if (this.status !== PaymentStatus.PENDING) {
       throw new Error(
         `Cannot mark payment as failed from status: ${this.status}`,
       );
     }
-    this.status = PaymentStatus.PAYMENT_FAILED;
+    this.status = PaymentStatus.FAILED;
+    this.updatedAt = new Date();
+  }
+
+  public markAsExpired(): void {
+    if (this.status !== PaymentStatus.PENDING) {
+      throw new Error(
+        `Cannot mark payment as expired from status: ${this.status}`,
+      );
+    }
+    this.status = PaymentStatus.EXPIRED;
     this.updatedAt = new Date();
   }
 
@@ -117,6 +127,16 @@ export class Payment {
       );
     }
     this.status = PaymentStatus.REFUNDED;
+    this.updatedAt = new Date();
+  }
+
+  public partiallyRefund(): void {
+    if (this.status !== PaymentStatus.PAID) {
+      throw new Error(
+        `Cannot partially refund payment that is not paid. Current status: ${this.status}`,
+      );
+    }
+    this.status = PaymentStatus.PARTIALLY_REFUNDED;
     this.updatedAt = new Date();
   }
 }
