@@ -193,3 +193,5 @@ Price normalization must occur only once at the infrastructure boundary, before 
 - Webhook failues 
 - Duplicate attemps
 -unmatched Payments
+
+phone number structure validation

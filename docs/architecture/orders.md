@@ -287,19 +287,23 @@ PENDING
 PAID
 FAILED
 REFUNDED
+PARTIALLY_REFUNDED
 ```
 
 Allowed transitions:
 
 ```text
-PENDING
-   ├────► PAID
-   └────► FAILED
+    PENDING
+    ├──► PAID
+    ├──► FAILED
+    └──► EXPIRED
 
-PAID
-   │
-   ▼
-REFUNDED
+    PAID
+    ├──► REFUNDED
+    └──► PARTIALLY_REFUNDED
+
+    PARTIALLY_REFUNDED
+    └──► REFUNDED
 ```
 
 The payment lifecycle is owned by the Payments module.

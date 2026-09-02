@@ -56,6 +56,7 @@ Domain states should be used in the business system.
 - `PAID`
 - `FAILED`
 - `REFUNDED`
+- `PARTIALLY_REFUNDED`
 
 ## 4. Provider-to-domain mappings
 
