@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import CartSummary from "@/modules/cart/presentation/components/CartSummary";
@@ -38,8 +38,9 @@ function CheckoutFlow({
 }: CheckoutFlowProps) {
   const router = useRouter();
   const shippingFormRef = useRef<HTMLFormElement>(null);
+  const [orderId, setOrderId] = useState<string | undefined>();
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (activeStep === 2) {
       shippingFormRef.current?.requestSubmit();
       return;
@@ -47,17 +48,12 @@ function CheckoutFlow({
     onNextStep();
   };
 
-  const handleShippingSubmit = (data: ShippingFormInputs) => {
+  const handleShippingSubmit = async (data: ShippingFormInputs) => {
     setShippingForm(data);
-    onNextStep();
-  };
-
-  const handlePaymentSubmit = async () => {
-    if (!shippingForm || cart.length === 0) return;
 
     try {
       const order = await submitCheckoutAction({
-        shippingForm,
+        shippingForm: data,
         cart: cart.map((item) => ({
           id: item.id,
           name: item.name,
@@ -68,13 +64,18 @@ function CheckoutFlow({
         })),
       });
 
-      container.cart.clearCartUseCase.execute();
-      router.push(`/orders/confirmation/${order.id}`);
+      setOrderId(order.id);
+      onNextStep();
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Unknown error";
-      alert(`Failed to place order: ${message}`);
+      alert(`Failed to create order: ${message}`);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    container.cart.clearCartUseCase.execute();
+    router.push(`/orders/confirmation/${orderId}`);
   };
 
   return (
@@ -84,8 +85,9 @@ function CheckoutFlow({
           activeStep={activeStep}
           cart={cart}
           shippingForm={shippingForm}
+          orderId={orderId}
           onShippingSubmit={handleShippingSubmit}
-          onPaymentSubmit={handlePaymentSubmit}
+          onPaymentSuccess={handlePaymentSuccess}
           onRemoveCartItem={onRemoveCartItem}
           onIncreaseQuantity={onIncreaseQuantity}
           onDecreaseQuantity={onDecreaseQuantity}

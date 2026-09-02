@@ -11,8 +11,9 @@ type CheckoutContentProps = {
   activeStep: number;
   cart: CartItemType[];
   shippingForm?: ShippingFormInputs;
+  orderId?: string;
   onShippingSubmit: (data: ShippingFormInputs) => void;
-  onPaymentSubmit: () => Promise<void>;
+  onPaymentSuccess: () => void;
   onRemoveCartItem: (item: CartItemType) => void;
   onIncreaseQuantity: (item: CartItemType) => void;
   onDecreaseQuantity: (item: CartItemType) => void;
@@ -23,8 +24,9 @@ function CheckoutContent({
   activeStep,
   cart,
   shippingForm,
+  orderId,
   onShippingSubmit,
-  onPaymentSubmit,
+  onPaymentSuccess,
   onRemoveCartItem,
   onIncreaseQuantity,
   onDecreaseQuantity,
@@ -51,12 +53,27 @@ function CheckoutContent({
       );
 
     case 3:
-      return shippingForm ? (
-        <PaymentForm onSubmit={onPaymentSubmit} />
-      ) : (
-        <p className="text-sm text-gray-500">
-          Please fill in the shipping form to continue.
-        </p>
+      if (!shippingForm) {
+        return (
+          <p className="text-sm text-gray-500">
+            Please fill in the shipping form to continue.
+          </p>
+        );
+      }
+
+      if (!orderId) {
+        return (
+          <p className="text-sm text-gray-500">
+            Creating your order...
+          </p>
+        );
+      }
+
+      return (
+        <PaymentForm
+          orderId={orderId}
+          onSuccess={onPaymentSuccess}
+        />
       );
 
     default:

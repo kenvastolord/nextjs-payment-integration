@@ -10,7 +10,7 @@ interface CreatePaymentProps {
   paymentMethod: PaymentMethodType;
   amountMinorUnits: number;
   currency: string;
-  redirectUrl?: string;
+  paymentToken?: string;
 }
 
 export class Payment {
@@ -23,7 +23,7 @@ export class Payment {
     private readonly amountMinorUnits: number,
     private readonly currency: string,
     private status: PaymentStatus,
-    private readonly redirectUrl: string | undefined,
+    private readonly paymentToken: string | undefined,
     private readonly createdAt: Date,
     private updatedAt: Date,
   ) { }
@@ -40,7 +40,7 @@ export class Payment {
       props.amountMinorUnits,
       props.currency,
       PaymentStatus.PENDING,
-      props.redirectUrl,
+      props.paymentToken,
       now,
       now,
     );
@@ -78,8 +78,8 @@ export class Payment {
     return this.status;
   }
 
-  public getRedirectUrl(): string | undefined {
-    return this.redirectUrl;
+  public getPaymentToken(): string | undefined {
+    return this.paymentToken;
   }
 
   public getCreatedAt(): Date {

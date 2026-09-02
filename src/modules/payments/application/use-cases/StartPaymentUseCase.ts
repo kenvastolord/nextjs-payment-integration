@@ -16,7 +16,7 @@ export interface StartPaymentInput {
 
 export interface StartPaymentOutput {
   paymentId: string;
-  redirectUrl: string | undefined;
+  paymentToken: string | undefined;
 }
 
 export class StartPaymentUseCase {
@@ -64,14 +64,14 @@ export class StartPaymentUseCase {
       paymentMethod: input.paymentMethod,
       amountMinorUnits: response.amount.amount,
       currency: response.amount.currency,
-      redirectUrl: response.redirectUrl,
+      paymentToken: response.paymentToken,
     });
 
     await this.paymentRepository.save(payment);
 
     return {
       paymentId: payment.getId(),
-      redirectUrl: payment.getRedirectUrl(),
+      paymentToken: payment.getPaymentToken(),
     };
   }
 }
