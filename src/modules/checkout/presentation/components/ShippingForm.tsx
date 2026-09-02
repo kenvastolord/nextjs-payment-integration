@@ -2,7 +2,7 @@
 
 import { forwardRef } from "react";
 
-import "./ phone-input.css";
+import "./phone-input.css";
 import "react-phone-number-input/style.css";
 
 import {
