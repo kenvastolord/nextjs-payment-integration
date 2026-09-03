@@ -3,12 +3,12 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import useCartStore from "@/modules/cart/store/cartStore";
 import CartSummary from "@/modules/cart/presentation/components/CartSummary";
 import CheckoutContent from "./CheckoutContent";
 import CheckoutNavigation from "./CheckoutNavigation";
 
 import { submitCheckoutAction } from "@/modules/checkout/actions/checkoutActions";
-import { container } from "@/infrastructure/container";
 
 import { CartItemType } from "@/modules/cart/types/cart.types";
 import { ShippingFormInputs } from "@/modules/checkout/schemas/shipping.schema";
@@ -39,6 +39,7 @@ function CheckoutFlow({
   const router = useRouter();
   const shippingFormRef = useRef<HTMLFormElement>(null);
   const [orderId, setOrderId] = useState<string | undefined>();
+  const { clearCart } = useCartStore();
 
   const handleNextStep = async () => {
     if (activeStep === 2) {
@@ -74,7 +75,7 @@ function CheckoutFlow({
   };
 
   const handlePaymentSuccess = () => {
-    container.cart.clearCartUseCase.execute();
+    clearCart();
     router.push(`/orders/confirmation/${orderId}`);
   };
 

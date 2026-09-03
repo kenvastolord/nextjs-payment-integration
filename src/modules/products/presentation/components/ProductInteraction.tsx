@@ -1,5 +1,6 @@
 "use client";
-import { container } from "@/infrastructure/container";
+
+import useCartStore from "@/modules/cart/store/cartStore";
 import { ProductType } from "@/modules/products/types/product.types";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -19,6 +20,7 @@ const ProductInteraction = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCartStore();
 
   const handleTypeChange = (type: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -37,7 +39,7 @@ const ProductInteraction = ({
   };
 
   const handleAddToCart = () => {
-    container.cart.addProductToCartUseCase.execute({
+    addToCart({
       ...product,
       quantity,
       selectedColor,
@@ -46,6 +48,7 @@ const ProductInteraction = ({
 
     toast.success("Product added to cart");
   };
+
   return (
     <div className="flex flex-col gap-4 mt-4">
       {/* SIZE */}
@@ -71,6 +74,7 @@ const ProductInteraction = ({
           ))}
         </div>
       </div>
+
       {/* COLOR */}
       <div className="flex flex-col gap-2 text-sm">
         <span className="text-gray-500">Color</span>
@@ -82,11 +86,12 @@ const ProductInteraction = ({
               key={color}
               onClick={() => handleTypeChange("color", color)}
             >
-              <div className={`w-6 h-6`} style={{ backgroundColor: color }} />
+              <div className="w-6 h-6" style={{ backgroundColor: color }} />
             </div>
           ))}
         </div>
       </div>
+
       {/* QUANTITY */}
       <div className="flex flex-col gap-2 text-sm">
         <span className="text-gray-500">Quantity</span>
@@ -106,6 +111,7 @@ const ProductInteraction = ({
           </button>
         </div>
       </div>
+
       {/* BUTTONS */}
       <button
         onClick={handleAddToCart}
