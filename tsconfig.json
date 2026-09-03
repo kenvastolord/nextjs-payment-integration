@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@tests/*": [
+        "./tests/*"
       ]
     }
   },
@@ -36,6 +39,16 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.unit.test.ts",
+    "**/*.unit.test.tsx",
+    "**/*.integration.test.ts",
+    "**/*.integration.test.tsx",
+    "**/*.e2e.test.ts",
+    "**/*.e2e.test.tsx",
+    "tests/**/*",
+    "vitest.unit.config.mts",
+    "vitest.integration.config.mts",
+    "playwright.config.ts"
   ]
 }

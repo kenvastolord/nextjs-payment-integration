@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-
 import { CustomerSnapshot } from './CustomerSnapshot';
 
 describe('CustomerSnapshot', () => {
@@ -96,4 +95,4 @@ describe('CustomerSnapshot', () => {
       expect(first.equals(second)).toBe(false);
     });
   });
-}
+});
