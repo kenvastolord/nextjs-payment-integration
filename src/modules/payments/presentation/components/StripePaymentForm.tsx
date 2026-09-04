@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Lock, ShoppingCart } from "lucide-react";
 
 type StripePaymentFormProps = {
@@ -11,7 +11,7 @@ type StripePaymentFormProps = {
 };
 
 function StripePaymentForm({
-  paymentToken,
+  paymentToken: _paymentToken,
   onSuccess,
   onError,
 }: StripePaymentFormProps) {
@@ -24,14 +24,14 @@ function StripePaymentForm({
 
     if (!stripe || !elements) return;
 
-    const card = elements.getElement(CardElement);
-
-    if (!card) return;
-
     setIsSubmitting(true);
 
-    const { error } = await stripe.confirmCardPayment(paymentToken, {
-      payment_method: { card },
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.origin,
+      },
+      redirect: "if_required",
     });
 
     if (error) {
@@ -45,22 +45,11 @@ function StripePaymentForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium">Card details</label>
-        <div className="rounded-lg border border-gray-300 px-4 py-3">
-          <CardElement
-            options={{
-              style: {
-                base: {
-                  fontSize: "16px",
-                  color: "#111827",
-                  "::placeholder": { color: "#9ca3af" },
-                },
-              },
-            }}
-          />
-        </div>
-      </div>
+      <PaymentElement
+        options={{
+          layout: "tabs",
+        }}
+      />
 
       <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3 text-sm text-gray-600">
         <Lock className="h-4 w-4" />

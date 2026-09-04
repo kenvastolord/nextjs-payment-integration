@@ -49,13 +49,15 @@ export class Order {
       throw new EmptyOrderError();
     }
 
-    const calculatedTotal = items.reduce(
+    const calculatedSubtotal = items.reduce(
       (sum, item) => sum.add(item.getLineTotal()),
       items[0].getLineTotal().subtract(items[0].getLineTotal()),
     );
 
-    if (!calculatedTotal.equals(totals.getTotal())) {
-      throw new Error("Order total does not match the sum of its items.");
+    if (!calculatedSubtotal.equals(totals.getSubtotal())) {
+      throw new Error(
+        "Order subtotal does not match the sum of its item line totals.",
+      );
     }
 
     const now = new Date();
@@ -198,19 +200,13 @@ export class Order {
     this.updatedAt = new Date();
   }
 
-  private transitionTo(
-    expected: OrderStatus,
-    next: OrderStatus,
-  ): void {
+  private transitionTo(expected: OrderStatus, next: OrderStatus): void {
     if (this.status === next) {
       throw new OrderAlreadyInStatusError(next);
     }
 
     if (this.status !== expected) {
-      throw new InvalidOrderStatusTransitionError(
-        this.status,
-        next,
-      );
+      throw new InvalidOrderStatusTransitionError(this.status, next);
     }
 
     this.status = next;

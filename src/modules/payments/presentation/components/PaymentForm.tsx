@@ -41,7 +41,10 @@ function PaymentForm({ orderId, onSuccess }: PaymentFormProps) {
   }
 
   return (
-    <Elements stripe={stripePromise}>
+    <Elements
+      stripe={stripePromise}
+      options={{ clientSecret: paymentToken }}
+    >
       <StripePaymentForm
         paymentToken={paymentToken}
         onSuccess={onSuccess}

@@ -1,3 +1,4 @@
+import { formatPrice } from "@/shared/utils/formatPrice";
 import { CartItemType } from "../../types/cart.types";
 
 type CartSummaryProps = {
@@ -23,7 +24,7 @@ function CartSummary({ cart }: CartSummaryProps) {
           </span>
 
           <span className="font-medium">
-            ${subtotal.toFixed(2)}
+            ${formatPrice(subtotal)}
           </span>
         </div>
 
@@ -53,7 +54,7 @@ function CartSummary({ cart }: CartSummaryProps) {
           <span>Total</span>
 
           <span>
-            ${subtotal.toFixed(2)}
+            ${formatPrice(subtotal)}
           </span>
         </div>
       </div>

@@ -165,8 +165,6 @@ The application will eventually consume product data from external e-commerce AP
 - Strings (`"9.99"`)
 - Provider-specific formats
 
-Assuming a single representation inside the Orders module would couple the domain to external API contracts.
-
 ### Decision
 
 The domain model (`Products`, `Cart`, `Orders`, and `Payments`) will operate exclusively with a single internal price representation.

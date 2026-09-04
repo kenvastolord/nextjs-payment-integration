@@ -1,3 +1,5 @@
+import "server-only";
+
 import { PaymentGateway } from "@/modules/payments/domain/services/PaymentGateway";
 import { CreatePaymentRequestDto } from "@/modules/payments/application/dto/payment-gateway/CreatePaymentRequestDto";
 import { CreatePaymentResponseDto } from "@/modules/payments/application/dto/payment-gateway/CreatePaymentResponseDto";
@@ -11,6 +13,9 @@ export class StripePaymentService implements PaymentGateway {
     const paymentIntent = await stripeClient.paymentIntents.create({
       amount: request.amount.amount,
       currency: request.amount.currency.toLowerCase(),
+      automatic_payment_methods: {
+        enabled: true,
+      },
       metadata: {
         orderId: request.orderId,
         customerId: request.customer.id,

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Trash2, Minus, Plus } from "lucide-react";
 
 import { CartItemType } from "../../types/cart.types";
+import { formatPrice } from "@/shared/utils/formatPrice";
 
 type CartItemProps = {
   item: CartItemType;
@@ -71,7 +72,7 @@ function CartItem({
             <p className="text-sm text-gray-500">Price</p>
 
             <p className="text-lg font-semibold">
-              ${subtotal.toFixed(2)}
+              ${formatPrice(subtotal)}
             </p>
           </div>
 
